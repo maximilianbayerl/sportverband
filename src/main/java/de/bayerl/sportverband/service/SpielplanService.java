@@ -74,6 +74,12 @@ public class SpielplanService {
     public List<Spiel> getSpieleEinerMannschaft(Mannschaft m){
         return spRep.findByMannschaft(m);
     }
+
+    @Transactional
+    public Spiel getSpielByID(Long id){
+        return spRep.findById(id);
+    }
+
 }
 
 

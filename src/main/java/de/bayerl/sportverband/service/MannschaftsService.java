@@ -18,6 +18,7 @@ public class MannschaftsService {
     @Transactional
     public Mannschaft create(String mannschaftsName, Integer anzahlMitgliederFanClub){
         Mannschaft m = new Mannschaft(mannschaftsName, anzahlMitgliederFanClub);
+        m.createTabellenPosition();
         manRep.persist(m);
         return m;
     }

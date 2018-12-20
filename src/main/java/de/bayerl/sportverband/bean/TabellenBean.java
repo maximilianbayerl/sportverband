@@ -2,6 +2,7 @@ package de.bayerl.sportverband.bean;
 
 import de.bayerl.sportverband.entity.Tabelle;
 import de.bayerl.sportverband.entity.Tabellenposition;
+import de.bayerl.sportverband.service.Sortbyroll;
 import de.bayerl.sportverband.service.TabellenPositionService;
 import de.bayerl.sportverband.service.TabellenService;
 import javafx.scene.control.Tab;
@@ -12,9 +13,7 @@ import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Named
 @SessionScoped
@@ -53,10 +52,23 @@ public class TabellenBean implements Serializable {
         return tabServ.findTabelleByName(ligaName);
     }
 
+    public ArrayList<Tabellenposition> sortTabelle(List<Tabellenposition> tabelleUnsortiert){
+        ArrayList<Tabellenposition> tabelleSortiert = new ArrayList<>();
+        Tabellenposition t;
+        for(int i = 0;  i < tabelleUnsortiert.size(); i++){
+            tabelleSortiert.add(tabelleUnsortiert.get(i));
+        }
+        Collections.sort(tabelleSortiert, new Sortbyroll());
+        for(int m = 0; m<tabelleSortiert.size(); m++){
+            tabelleSortiert.get(m).setPlatz(m+1);
+        }
+        return tabelleSortiert;
+    }
+
     public void init(){
             Tabelle t = findTabelleByLigaName(this.ligaName);
             if(this.ligaName != null){
-                this.tabellenpositionen = getAllTabellenpositionen(t);
+                this.tabellenpositionen = sortTabelle(getAllTabellenpositionen(t));
             }
 
     }

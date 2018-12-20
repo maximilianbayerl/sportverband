@@ -78,7 +78,7 @@ public class Tabellenposition extends BasisEntity implements Serializable {
         this.anzahlTorDifferenz = anzahlTorDifferenz;
         this.anzahlAbsolvierteSpiele = anzahlAbsolvierteSpiele;
         System.out.println(anzahlSiege);
-        System.out.println("SIEGE");
+        System.out.println("SIEGERRR");
     }
     public String getMannschaftsName(Mannschaft m){
         return m.getMannschaftsName();
