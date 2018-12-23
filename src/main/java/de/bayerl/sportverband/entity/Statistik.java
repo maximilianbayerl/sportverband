@@ -47,15 +47,4 @@ public class Statistik extends BasisEntity implements Serializable {
         this.toreProSpiel = 0.0;
         this.punkteProSpiel = 0.0;
     }
-    private Statistik(Integer ungeschlagenSeitAnzahlSpiele, Integer siegesSerie, Integer gewonneneSaisons,
-                      Integer bestePlatzierungEndeSaison, Integer besteTordifferenz, Double toreProSpiel, Double punkteProSpiel){
-        this.ungeschlagenSeitAnzahlSpiele = ungeschlagenSeitAnzahlSpiele;
-        this.siegesSerie = siegesSerie;
-        this.gewonneneSaisons = gewonneneSaisons;
-        this.bestePlatzierungEndeSaison = bestePlatzierungEndeSaison;
-        this.besteTordifferenz = besteTordifferenz;
-        this. toreProSpiel = toreProSpiel;
-        this.punkteProSpiel = punkteProSpiel;
-    }
-
 }

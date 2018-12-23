@@ -2,6 +2,7 @@ package de.bayerl.sportverband.service;
 
 import de.bayerl.sportverband.entity.Mannschaft;
 import de.bayerl.sportverband.entity.Spiel;
+import de.bayerl.sportverband.entity.Statistik;
 import de.bayerl.sportverband.entity.Tabellenposition;
 import de.bayerl.sportverband.repository.SpielplanRepository;
 import de.bayerl.sportverband.repository.TabellenPositionRepository;
@@ -74,5 +75,37 @@ public class TabellenPositionService {
 
         return tabPosRep.merge(aktuellePosition);
     }
+
+   /* private void aktualisiereStatistik (Mannschaft m){
+        List<Spiel> spiele = spRep.findByMannschaft(m);
+        Statistik s = m.getStatistik();
+        int ungeschlagenSeitAnzahlSpiele = 0;
+        int besteSiegeSerie = 0;
+        int gewonneneSaisons = 0;
+        int bestePlatzierungEndeSaison = 0;
+        int besteTordifferenzProSpiel = 0;
+        double schnittToreProSpiel = 0;
+        double schnittPunkteProSpiel = 0;
+        int anzahlAbsolvierteSpieleGesamt = 0;
+
+        for (int i = 0; i<spiele.size(); i++){
+            if(spiele.get(i).getAbsolviert()) {
+                //heim
+                if(spiele.get(i).getMannschaftHeim().getId() == m.getId()){
+                  // todo: sort spiele by Datum für ungeschlagen seit und Serien
+                } else { // gast
+
+                }
+                if(anzahlToreProSpiel > anzahlGegenToreProSpiel){
+                    anzahlSiege ++;
+                } else if(anzahlToreProSpiel == anzahlGegenToreProSpiel){
+                    anzahlUnentschieden ++;
+                } else if(anzahlToreProSpiel < anzahlGegenToreProSpiel && anzahlGegenToreProSpiel > 0){
+                    anzahlNiederlage ++;
+                }
+            }
+        }
+
+    }*/
 
 }

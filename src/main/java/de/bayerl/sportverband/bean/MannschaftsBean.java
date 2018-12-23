@@ -16,6 +16,8 @@ import javax.inject.Named;
 import javax.persistence.CascadeType;
 import javax.persistence.OneToOne;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Named
@@ -54,7 +56,15 @@ public class MannschaftsBean implements Serializable {
 
     @Getter
     @Setter
+    private List <String> ligen;
+
+    @Getter
+    @Setter
     private List<Mannschaft> mannschaften;
+
+    @Getter
+    @Setter
+    private Date datum;
 
     public List<Mannschaft> getMannschaften(){
         return manServ.getMannschaften();
@@ -68,6 +78,17 @@ public class MannschaftsBean implements Serializable {
     }
     public void init(){
         this.mannschaften = getMannschaften();
+        this.ligen = new ArrayList<>();
+        List <Tabelle> ligas = tabServ.getAlle();
+        for(int i = 0; i< ligas.size(); i++){
+            this.ligen.add(ligas.get(i).getLigaName());
+        }
+
+    }
+
+    public Mannschaft zeigeStatistik(Mannschaft m){
+        //todo: zeige Statistik (new Page)
+        return m;
 
     }
 }

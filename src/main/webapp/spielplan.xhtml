@@ -16,12 +16,24 @@
             <div class="container">
             <div class="col-md-6 col-md-offset-3">
                 <h:form id="createHR">
+                    <div class="form-group">
+                        <label>Liga</label>
+                        <h:selectOneMenu id="LigaHR" value="#{spielBean.ligaName}">
+                            <f:selectItems value="#{spielBean.ligen}" />
+                        </h:selectOneMenu>
+                    </div>
                     <h:commandButton id="createHRButton" class="btn btn-success btn-lg btn-block"
                                      action="#{spielBean.createHR}" value="CREATE HR"
                                    />
                     
               </h:form>
                 <h:form id="createRR">
+                    <div class="form-group">
+                        <label>Liga</label>
+                        <h:selectOneMenu id="LigaRR" value="#{spielBean.ligaName}">
+                        <f:selectItems value="#{spielBean.ligen}" />
+                        </h:selectOneMenu>
+                    </div>
                     <h:commandButton id="createRRButton" class="btn btn-success btn-lg btn-block"
                                      action="#{spielBean.createHRRR}" value="CREATE HRRR"
                                      />
@@ -29,6 +41,23 @@
                 </h:form>
             </div>
         </div>
+            <div class="container">
+                <div class="col-md-6 col-md-offset-3">
+                    <h:form id="anzeigen">
+                        <div class="form-group">
+                            <label>Liga</label>
+                            <h:selectOneMenu id="LigaShow" value="#{spielBean.ligaNameAnzeigen}">
+                                <f:selectItems value="#{spielBean.ligenAnzeigen}" />
+                            </h:selectOneMenu>
+                        </div>
+                        <h:commandButton id="anzeigenByLigaName" class="btn btn-success btn-lg btn-block"
+                                         action="#{spielBean.spieleAnzeigen}" value="Spiele anzeigen"
+                        />
+
+                    </h:form>
+                </div>
+            </div>
+
             <div class="container">
                 <div class="row">
                     <div class="col-md-10 col-md-offset-1">
@@ -57,29 +86,48 @@
                             </h:column>
                             <h:column>
                                 <f:facet name="header">
-                                   TrefferHeimHZ:
+                                   HeimHZ:
                                 </f:facet>
                                 <h:outputText value="#{spiel.trefferHeimErsteHalbzeit}"></h:outputText>
                             </h:column>
                             <h:column>
                                 <f:facet name="header">
-                                    TrefferGastHZ:
+                                    GastHZ:
                                 </f:facet>
                                 <h:outputText value="#{spiel.trefferGastErsteHalbzeit}"></h:outputText>
                             </h:column>
                             <h:column>
                                 <f:facet name="header">
-                                    TrefferHeimEnde:
+                                   HeimEnde:
                                 </f:facet>
                                 <h:outputText value="#{spiel.trefferHeimEnde}"></h:outputText>
                             </h:column>
                             <h:column>
                                 <f:facet name="header">
-                                    TrefferGastEnde:
+                                    GastEnde:
                                 </f:facet>
                                 <h:outputText value="#{spiel.trefferGastEnde}"></h:outputText>
                             </h:column>
                             <h:column>
+                                <f:facet name="header">
+                                   Zeit, Ort:
+                                </f:facet>
+                                <h:form>
+                                    <div class="form-group">
+                                        <label>Datum</label>
+                                        <h:inputText value="#{spiel.datum}">
+                                            <f:convertDateTime pattern="yyyy-MM-dd HH:mm"/>
+                                        </h:inputText>
+                                    </div>
+                                <h:commandButton  value="Stadion buchen"
+                                                  class="btn btn-success btn-lg btn-block"
+                                                  action="#{spielBean.bucheStadion(spiel)}"/>
+                            </h:form>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">
+                                    Tore:
+                                </f:facet>
                                 <h:form>
                                     <div class="form-group">
                                         <label>HeimH</label>
@@ -99,7 +147,7 @@
                                         <label>GastE</label>
                                         <h:inputText class="form-control" value="#{spielBean.trefferGastEnde}"/>
                                     </div>
-                                    <h:commandButton  value="Punkte eintragen"
+                                    <h:commandButton  value="OK"
                                                       class="btn btn-success btn-lg btn-block"
                                                       action="#{spielBean.tragePunkteEin(spiel)}"/>
                                 </h:form>

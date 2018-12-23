@@ -23,7 +23,7 @@
                         <div class="form-group">
                             <label>Datum</label>
                             <h:inputText value="#{tabellenBean.saison}">
-                                <f:convertDateTime pattern="yyyy-MM-dd"/>
+                                <f:convertDateTime pattern="yyyy"/>
                             </h:inputText>
                         </div>
                         <h:commandButton value="Create Tabelle" class="btn btn-success btn-lg btn-block"
@@ -31,6 +31,21 @@
                     </h:form>
                 </div>
             </div>
+            <div class="container">
+                <div class="col-md-6">
+                    <h:form>
+                        <div class="form-group">
+                            <label>Liga</label>
+                            <h:selectOneMenu id="Ligas" value="#{tabellenBean.ligaNameAnzeigen}">
+                                <f:selectItems value="#{tabellenBean.ligen}" />
+                            </h:selectOneMenu>
+                        </div>
+                        <h:commandButton value="Tabelle für Liga anzeigen:" class="btn btn-success btn-lg btn-block"
+                                         action="#{tabellenBean.anzeigenByLigaName()}"/>
+                    </h:form>
+                </div>
+            </div>
+
             <div class="container">
             <div class="row">
                 <div class="col-md-10 col-md-offset-1">

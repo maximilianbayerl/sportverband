@@ -25,8 +25,10 @@
                                 <h:inputText class="form-control" value="#{mannschaftsBean.anzahlMitgliederFanClub}"/>
                         </div>
                     <div class="form-group">
-                        <label>Liga Name:</label>
-                        <h:inputText class="form-control" value="#{mannschaftsBean.ligaName}"/>
+                        <label>Liga Name:  </label>
+                        <h:selectOneMenu id="Ligas" value="#{mannschaftsBean.ligaName}">
+                            <f:selectItems value="#{mannschaftsBean.ligen}" />
+                        </h:selectOneMenu>
                     </div>
                     <h:commandButton value="Create Mannschaft" class="btn btn-success btn-lg btn-block"
                                      action="#{mannschaftsBean.createMannschaft()}"/>
@@ -51,6 +53,22 @@
                                     Mitglieder Fan Club:
                                 </f:facet>
                                 <h:outputText value="#{mannschaft.anzahlMitgliederFanClub}"></h:outputText>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">
+                                    Liga:
+                                </f:facet>
+                                <h:outputText value="#{mannschaft.tabellenPosition.tabelle.ligaName}"></h:outputText>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">
+                                   Statistik:
+                                </f:facet>
+                                <h:form>
+                                    <h:commandButton  value="Statistik anzeigen"
+                                                      class="btn btn-success btn-lg btn-block"
+                                                      action="#{mannschaftsBean.zeigeStatistik(mannschaft)}"/>
+                                </h:form>
                             </h:column>
                         </h:dataTable>
                     </div>

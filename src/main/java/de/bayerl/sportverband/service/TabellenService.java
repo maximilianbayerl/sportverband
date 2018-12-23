@@ -51,5 +51,11 @@ public class TabellenService {
         return tabRep.findByName(ligaName);
     }
 
+    @Transactional
+    public List<Tabelle> getAlle(){
+        return tabRep.findAll();
+    }
+
+
 //todo: delete tabelle, change...
 }

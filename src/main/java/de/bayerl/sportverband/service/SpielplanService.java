@@ -22,31 +22,31 @@ public class SpielplanService {
     private SpielplanRepository spRep;
 
     @Transactional
-    public List <Spiel> createHRRR(Date datum, String schiedsrichterName){
-        List <Mannschaft> m = mannschaftsService.getMannschaften();
+    public List <Spiel> createHRRR(String ligaName){
+        List <Mannschaft> m = mannschaftsService.getMannschaftenByLigaName(ligaName);
         for(int i = 0; i < m.size(); i++){
             for(int x = 0; x < m.size(); x++){
                 if(x!=i){
-                    Spiel s = new Spiel(m.get(i), m.get(x),datum, schiedsrichterName);
+                    Spiel s = new Spiel(m.get(i), m.get(x), ligaName);
                     spRep.persist(s);
                 }
             }
         }
-        return spRep.findAll();
+        return spRep.findByLigaName(ligaName);
     }
 
     @Transactional
-    public List<Spiel> createHR(Date datum, String schiedsrichterName){
-        List <Mannschaft> m = mannschaftsService.getMannschaften();
+    public List<Spiel> createHR(String ligaName){
+        List <Mannschaft> m = mannschaftsService.getMannschaftenByLigaName(ligaName);
         for(int i = 0; i < m.size(); i++){
             for(int x = i; x < m.size(); x++){
                 if(x!=i){
-                    Spiel s = new Spiel(m.get(i), m.get(x),datum, schiedsrichterName);
+                    Spiel s = new Spiel(m.get(i), m.get(x),ligaName);
                     spRep.persist(s);
                 }
             }
         }
-        return spRep.findAll();
+        return spRep.findByLigaName(ligaName);
     }
 
 
@@ -58,6 +58,13 @@ public class SpielplanService {
         return spRep.merge(s);
     }
 
+    @Transactional
+    public Spiel trageStadionEin (Long spielId, Date datum, Long stadionId){
+        Spiel s = spRep.findById(spielId);
+        s.bucheStadionFake(stadionId, datum);
+        System.out.println("Stadion gebucht");
+        return spRep.merge(s);
+    }
 
 
     @Transactional
@@ -69,6 +76,8 @@ public class SpielplanService {
     @Transactional
     public List<Spiel> getSpiele() {return spRep.findAll();}
 
+    @Transactional
+    public List<Spiel> getSpieleByLigaName(String ligaName) {return spRep.findByLigaName(ligaName); }
 
     @Transactional
     public List<Spiel> getSpieleEinerMannschaft(Mannschaft m){

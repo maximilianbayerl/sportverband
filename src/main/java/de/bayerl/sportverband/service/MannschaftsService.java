@@ -35,6 +35,12 @@ public class MannschaftsService {
     }
 
     @Transactional
+    public List<Mannschaft> getMannschaftenByLigaName(String ligaName){
+        return manRep.findByLigaName(ligaName);
+    }
+
+
+    @Transactional
     public List<Mannschaft> getMannschaften() {return manRep.findAll();}
 
 }

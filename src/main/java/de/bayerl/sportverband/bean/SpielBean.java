@@ -3,8 +3,10 @@ package de.bayerl.sportverband.bean;
 
 import de.bayerl.sportverband.entity.Mannschaft;
 import de.bayerl.sportverband.entity.Spiel;
+import de.bayerl.sportverband.entity.Tabelle;
 import de.bayerl.sportverband.service.SpielplanService;
 import de.bayerl.sportverband.service.TabellenPositionService;
+import de.bayerl.sportverband.service.TabellenService;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,8 +15,10 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.OneToOne;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 @Named
 @SessionScoped
@@ -25,13 +29,12 @@ public class SpielBean implements Serializable {
     @Inject
     TabellenPositionService tabPosServ;
 
+    @Inject
+    TabellenService tabServ;
 
     @Getter
     @Setter
     private Mannschaft mannschaftHeim;
-
-    @Getter
-    private Long id;
 
     @Getter
     @Setter
@@ -59,27 +62,32 @@ public class SpielBean implements Serializable {
 
     @Getter
     @Setter
-    private String schiedsrichterName;
-
+    private String ligaName;
 
     @Getter
     @Setter
-    private Spiel spiel;
+    private List <String> ligen;
+
+    @Getter
+    @Setter
+    private String ligaNameAnzeigen;
+
+    @Getter
+    @Setter
+    private List <String> ligenAnzeigen;
 
     @Getter
     @Setter
     private List<Spiel> spiele;
 
     public List<Spiel> createHR(){
-        return spServ.createHR(this.datum, this.schiedsrichterName);
+        this.ligaNameAnzeigen = this.ligaName;
+        return spServ.createHR(this.ligaName);
     }
 
     public List<Spiel> createHRRR(){
-        return spServ.createHRRR(this.datum, this.schiedsrichterName);
-    }
-
-    public List<Spiel> getSpiele(){
-        return  spServ.getSpiele();
+        this.ligaNameAnzeigen = this.ligaName;
+        return spServ.createHRRR(this.ligaName);
     }
 
     public String getMannschaftHeimName(){
@@ -110,7 +118,31 @@ public class SpielBean implements Serializable {
         return s;
     }
 
+    public List <Spiel> spieleAnzeigen(){
+        this.spiele = null;
+        this.spiele = spServ.getSpieleByLigaName(this.ligaNameAnzeigen);
+        System.out.println(this.ligaNameAnzeigen);
+        return this.spiele;
+    }
+
+    public Spiel bucheStadion(Spiel m){
+        // todo: greife auf chris bla bla zu buche usw now fake:
+        // schicke datum und anzahl fans beider mannschaften bspw.
+        // returns true if ok...
+        Random r = new Random();
+        Long stadionId = 100L + r.nextLong();
+        Spiel s = spServ.trageStadionEin(m.getId(), this.datum, stadionId);
+
+        return s;
+    }
+
     public void init(){
-        this.spiele = getSpiele();
+        this.ligen = new ArrayList<>();
+        this.ligenAnzeigen = new ArrayList<>();
+        List <Tabelle> ligas = tabServ.getAlle();
+        for(int i = 0; i< ligas.size(); i++){
+            this.ligen.add(ligas.get(i).getLigaName());
+            this.ligenAnzeigen.add(ligas.get(i).getLigaName());
+        }
     }
 }

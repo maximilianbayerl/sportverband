@@ -25,4 +25,17 @@ public class SpielplanRepository extends SingleIdEntityRepository<Spiel> {
             return spiele;
         }
     }
+
+    public List<Spiel> findByLigaName(String name ){
+        Query q = this.getEntityManager().createQuery("Select s FROM Spiel as s WHERE s.ligaName="+
+                ":ligaName");
+        q.setParameter("ligaName", name);
+        System.out.println(name);
+        List<Spiel> spiele = q.getResultList();
+        if(spiele.isEmpty()){
+            return null;
+        } else {
+            return spiele;
+        }
+    }
 }

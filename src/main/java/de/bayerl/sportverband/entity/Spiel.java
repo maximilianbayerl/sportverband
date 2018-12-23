@@ -44,26 +44,28 @@ public class Spiel extends BasisEntity implements Serializable {
 
     @Getter
     @Setter
-    private String schiedsrichterName;
+    private String ligaName;
 
     @Getter
     @Setter
     private Boolean absolviert;
 
+    @Getter
+    @Setter
+    private Long stadionId;
 
     public Spiel () {
 
     }
 
-    public Spiel(Mannschaft mannschaftHeim, Mannschaft mannschaftGast, Date datum, String schiedsrichterName){
+    public Spiel(Mannschaft mannschaftHeim, Mannschaft mannschaftGast,String ligaName){
         this.mannschaftGast = mannschaftGast;
         this.mannschaftHeim = mannschaftHeim;
-        this.datum = datum;
-        this.schiedsrichterName = schiedsrichterName;
+        this.ligaName = ligaName;
         this.absolviert = false;
     }
 
-    public Boolean punkteEintragen(Integer trefferHeimErsteHalbzeit,
+    public void punkteEintragen(Integer trefferHeimErsteHalbzeit,
     Integer trefferHeimEnde, Integer trefferGastErsteHalbzeit,
                  Integer trefferGastEnde, Boolean absolviert){
         this.trefferHeimErsteHalbzeit = trefferHeimErsteHalbzeit;
@@ -71,7 +73,11 @@ public class Spiel extends BasisEntity implements Serializable {
         this.trefferGastErsteHalbzeit = trefferGastErsteHalbzeit;
         this.trefferGastEnde = trefferGastEnde;
         this.absolviert = absolviert;
-        return true;
+    }
+
+    public void bucheStadionFake(Long stadionId, Date datum){
+        this.stadionId = stadionId;
+        this.datum = datum;
     }
 
     public String getMannschaftHeimName(){

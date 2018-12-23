@@ -30,6 +30,15 @@ public class TabellenBean implements Serializable {
 
     @Getter
     @Setter
+    private List <String> ligen;
+
+    @Getter
+    @Setter
+    private String ligaNameAnzeigen;
+
+
+    @Getter
+    @Setter
     private Date saison;
 
     @Getter
@@ -41,7 +50,15 @@ public class TabellenBean implements Serializable {
     private List<Tabellenposition> tabellenpositionen;
 
     public Tabelle createTabelle(){
-        return tabServ.createTabelle(this.ligaName, this.saison);
+        this.ligaNameAnzeigen = this.ligaName;
+        Tabelle t = tabServ.createTabelle(this.ligaName, this.saison);
+        List<String> ligen = new ArrayList<>();
+        List <Tabelle> ligas = tabServ.getAlle();
+        for(int i = 0; i< ligas.size(); i++){
+            ligen.add(ligas.get(i).getLigaName());
+        }
+        this.ligen = ligen;
+        return t;
     }
 
     public List<Tabellenposition> getAllTabellenpositionen(Tabelle t){
@@ -54,20 +71,35 @@ public class TabellenBean implements Serializable {
 
     public ArrayList<Tabellenposition> sortTabelle(List<Tabellenposition> tabelleUnsortiert){
         ArrayList<Tabellenposition> tabelleSortiert = new ArrayList<>();
-        Tabellenposition t;
-        for(int i = 0;  i < tabelleUnsortiert.size(); i++){
-            tabelleSortiert.add(tabelleUnsortiert.get(i));
+        if(tabelleUnsortiert != null) {
+            for (int i = 0; i < tabelleUnsortiert.size(); i++) {
+                tabelleSortiert.add(tabelleUnsortiert.get(i));
+            }
+            Collections.sort(tabelleSortiert, new Sortbyroll());
+            for (int m = 0; m < tabelleSortiert.size(); m++) {
+                tabelleSortiert.get(m).setPlatz(m + 1);
+            }
+            return tabelleSortiert;
+        } else {
+            return null;
         }
-        Collections.sort(tabelleSortiert, new Sortbyroll());
-        for(int m = 0; m<tabelleSortiert.size(); m++){
-            tabelleSortiert.get(m).setPlatz(m+1);
+    }
+    public void anzeigenByLigaName(){
+        Tabelle t = findTabelleByLigaName(this.ligaNameAnzeigen);
+        System.out.println(this.ligaNameAnzeigen);
+        if(this.ligaNameAnzeigen != null){
+            this.tabellenpositionen = sortTabelle(getAllTabellenpositionen(t));
         }
-        return tabelleSortiert;
     }
 
     public void init(){
-            Tabelle t = findTabelleByLigaName(this.ligaName);
-            if(this.ligaName != null){
+        this.ligen = new ArrayList<>();
+        List <Tabelle> ligas = tabServ.getAlle();
+        for(int i = 0; i< ligas.size(); i++){
+            this.ligen.add(ligas.get(i).getLigaName());
+        }
+            Tabelle t = findTabelleByLigaName(this.ligaNameAnzeigen);
+            if(this.ligaNameAnzeigen != null){
                 this.tabellenpositionen = sortTabelle(getAllTabellenpositionen(t));
             }
 
