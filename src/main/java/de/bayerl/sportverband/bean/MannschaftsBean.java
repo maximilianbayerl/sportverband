@@ -10,7 +10,9 @@ import de.bayerl.sportverband.service.TabellenService;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.bean.ManagedProperty;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.CascadeType;
@@ -66,6 +68,10 @@ public class MannschaftsBean implements Serializable {
     @Setter
     private Date datum;
 
+    @Getter
+    @Setter
+    private String mannschaftStat;
+
     public List<Mannschaft> getMannschaften(){
         return manServ.getMannschaften();
     }
@@ -77,6 +83,7 @@ public class MannschaftsBean implements Serializable {
         return m;
     }
     public void init(){
+        this.mannschaftStat = null;
         this.mannschaften = getMannschaften();
         this.ligen = new ArrayList<>();
         List <Tabelle> ligas = tabServ.getAlle();
@@ -86,9 +93,9 @@ public class MannschaftsBean implements Serializable {
 
     }
 
-    public Mannschaft zeigeStatistik(Mannschaft m){
-        //todo: zeige Statistik (new Page)
-        return m;
-
+    public String zeigeStatistik(String m){
+        this.mannschaftStat = m;
+        System.out.println(m);
+        return "statistik.xhtml?faces-redirect=true";
     }
 }

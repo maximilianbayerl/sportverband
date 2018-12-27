@@ -62,6 +62,10 @@ public class SpielBean implements Serializable {
 
     @Getter
     @Setter
+    private Long stadionId;
+
+    @Getter
+    @Setter
     private String ligaName;
 
     @Getter
@@ -106,22 +110,17 @@ public class SpielBean implements Serializable {
         this.trefferGastErsteHalbzeit = null;
         this.trefferHeimEnde = null;
         this.trefferHeimErsteHalbzeit = null;
-
         this.mannschaftHeim = s.getMannschaftHeim();
         this.mannschaftGast = s.getMannschaftGast();
-        System.out.println("ALARM");
-        System.out.println(s);
-        System.out.println(this.mannschaftHeim);
-        System.out.println(this.mannschaftGast);
         tabPosServ.trageDatenInTabellenpositionEin(this.mannschaftHeim);
         tabPosServ.trageDatenInTabellenpositionEin(this.mannschaftGast);
+        this.spiele = spServ.getSpieleByLigaName(this.ligaNameAnzeigen);
         return s;
     }
 
     public List <Spiel> spieleAnzeigen(){
         this.spiele = null;
         this.spiele = spServ.getSpieleByLigaName(this.ligaNameAnzeigen);
-        System.out.println(this.ligaNameAnzeigen);
         return this.spiele;
     }
 
@@ -130,8 +129,10 @@ public class SpielBean implements Serializable {
         // schicke datum und anzahl fans beider mannschaften bspw.
         // returns true if ok...
         Random r = new Random();
-        Long stadionId = 100L + r.nextLong();
-        Spiel s = spServ.trageStadionEin(m.getId(), this.datum, stadionId);
+        this.stadionId = 100L + r.nextLong();
+        Spiel s = spServ.trageStadionEin(m.getId(), this.datum, this.stadionId);
+        this.spiele = spServ.getSpieleByLigaName(this.ligaNameAnzeigen);
+
 
         return s;
     }

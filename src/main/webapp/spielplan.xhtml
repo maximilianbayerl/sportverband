@@ -110,12 +110,16 @@
                             </h:column>
                             <h:column>
                                 <f:facet name="header">
-                                   Zeit, Ort:
+                                   Stadion:
                                 </f:facet>
+                                Ort:
+                                <h:outputText value="#{spiel.stadionId}"></h:outputText>
+                                Zeit:
+                                <h:outputText value="#{spiel.datum}"></h:outputText>
                                 <h:form>
                                     <div class="form-group">
                                         <label>Datum</label>
-                                        <h:inputText value="#{spiel.datum}">
+                                        <h:inputText value="#{spielBean.datum}">
                                             <f:convertDateTime pattern="yyyy-MM-dd HH:mm"/>
                                         </h:inputText>
                                     </div>

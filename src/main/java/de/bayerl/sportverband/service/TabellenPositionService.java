@@ -11,6 +11,9 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.jws.WebService;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @RequestScoped
@@ -22,6 +25,9 @@ public class TabellenPositionService {
 
     @Inject
     private TabellenPositionRepository tabPosRep;
+
+    @Inject
+    private StatistikService statServ;
 
 
     public Tabellenposition getTabellenPositionOfMannschaft(Mannschaft m){
@@ -73,39 +79,9 @@ public class TabellenPositionService {
         aktuellePosition.aktualisiereWerte(anzahlSiege, anzahlNiederlage, anzahlUnentschieden, anzahlPunkte,
                 anzahlTore,anzahlGegentore, anzahlTorDifferenz, anzahlAbsolvierteSpiele);
 
+        statServ.aktualisiereStatistik(m);
         return tabPosRep.merge(aktuellePosition);
     }
 
-   /* private void aktualisiereStatistik (Mannschaft m){
-        List<Spiel> spiele = spRep.findByMannschaft(m);
-        Statistik s = m.getStatistik();
-        int ungeschlagenSeitAnzahlSpiele = 0;
-        int besteSiegeSerie = 0;
-        int gewonneneSaisons = 0;
-        int bestePlatzierungEndeSaison = 0;
-        int besteTordifferenzProSpiel = 0;
-        double schnittToreProSpiel = 0;
-        double schnittPunkteProSpiel = 0;
-        int anzahlAbsolvierteSpieleGesamt = 0;
-
-        for (int i = 0; i<spiele.size(); i++){
-            if(spiele.get(i).getAbsolviert()) {
-                //heim
-                if(spiele.get(i).getMannschaftHeim().getId() == m.getId()){
-                  // todo: sort spiele by Datum für ungeschlagen seit und Serien
-                } else { // gast
-
-                }
-                if(anzahlToreProSpiel > anzahlGegenToreProSpiel){
-                    anzahlSiege ++;
-                } else if(anzahlToreProSpiel == anzahlGegenToreProSpiel){
-                    anzahlUnentschieden ++;
-                } else if(anzahlToreProSpiel < anzahlGegenToreProSpiel && anzahlGegenToreProSpiel > 0){
-                    anzahlNiederlage ++;
-                }
-            }
-        }
-
-    }*/
 
 }

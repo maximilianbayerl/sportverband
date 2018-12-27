@@ -19,6 +19,7 @@ public class MannschaftsService {
     public Mannschaft create(String mannschaftsName, Integer anzahlMitgliederFanClub){
         Mannschaft m = new Mannschaft(mannschaftsName, anzahlMitgliederFanClub);
         m.createTabellenPosition();
+        m.createStatistik();
         manRep.persist(m);
         return m;
     }
@@ -32,6 +33,11 @@ public class MannschaftsService {
     @Transactional
     public Mannschaft getMannschaftByMannschaftsName(String mannschaftsName){
         return manRep.findByName(mannschaftsName);
+    }
+
+    @Transactional
+    public Mannschaft getMannschaftById(Long id){
+        return manRep.findById(id);
     }
 
     @Transactional

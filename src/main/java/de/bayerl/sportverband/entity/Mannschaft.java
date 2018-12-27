@@ -23,7 +23,7 @@ public class Mannschaft extends BasisEntity implements Serializable {
     @Setter
     private Integer anzahlMitgliederFanClub;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @Getter
     @Setter
     private Statistik statistik;
@@ -45,11 +45,13 @@ public class Mannschaft extends BasisEntity implements Serializable {
 
     public Long getMannschaftsId(){ return this.getId();}
 
-    public String getMannschaftsName(){return this.mannschaftsName;}
+    public Statistik createStatistik(){
+        this.statistik = new Statistik();
+        return this.statistik;
+    }
 
     public Tabellenposition createTabellenPosition(){
         this.tabellenPosition = new Tabellenposition(0,0,0,0,0,0,0,0);
         return this.tabellenPosition;}
 
-        public Tabellenposition getTabellenPosition(){return this.tabellenPosition;}
 }

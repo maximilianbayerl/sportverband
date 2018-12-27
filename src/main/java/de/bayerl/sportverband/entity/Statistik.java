@@ -20,14 +20,6 @@ public class Statistik extends BasisEntity implements Serializable {
 
     @Getter
     @Setter
-    private Integer gewonneneSaisons;
-
-    @Getter
-    @Setter
-    private Integer bestePlatzierungEndeSaison;
-
-    @Getter
-    @Setter
     private Integer besteTordifferenz;
 
     @Getter
@@ -38,11 +30,14 @@ public class Statistik extends BasisEntity implements Serializable {
     @Setter
     private Double punkteProSpiel;
 
+    @Getter
+    @Setter
+    @OneToOne(mappedBy = "statistik")
+    private Mannschaft mannschaft;
+
     public Statistik(){
         this.ungeschlagenSeitAnzahlSpiele = 0;
         this.siegesSerie = 0;
-        this.gewonneneSaisons = 0;
-        this.bestePlatzierungEndeSaison = 0;
         this.besteTordifferenz = 0;
         this.toreProSpiel = 0.0;
         this.punkteProSpiel = 0.0;

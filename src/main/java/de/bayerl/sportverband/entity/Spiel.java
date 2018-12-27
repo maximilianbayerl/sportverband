@@ -78,6 +78,7 @@ public class Spiel extends BasisEntity implements Serializable {
     public void bucheStadionFake(Long stadionId, Date datum){
         this.stadionId = stadionId;
         this.datum = datum;
+        System.out.println(this.datum);
     }
 
     public String getMannschaftHeimName(){

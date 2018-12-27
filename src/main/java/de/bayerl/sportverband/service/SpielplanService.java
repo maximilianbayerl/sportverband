@@ -54,7 +54,6 @@ public class SpielplanService {
     public Spiel tragePunkteEin (Long spielId, int heimH, int heimE, int gastH, int gastE, Boolean gespielt){
         Spiel s = spRep.findById(spielId);
         s.punkteEintragen(heimH, heimE, gastH, gastE,gespielt);
-        System.out.println("Did it");
         return spRep.merge(s);
     }
 
@@ -62,6 +61,7 @@ public class SpielplanService {
     public Spiel trageStadionEin (Long spielId, Date datum, Long stadionId){
         Spiel s = spRep.findById(spielId);
         s.bucheStadionFake(stadionId, datum);
+        System.out.println(datum);
         System.out.println("Stadion gebucht");
         return spRep.merge(s);
     }
