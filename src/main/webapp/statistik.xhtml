@@ -16,35 +16,35 @@
         <div class="container">
             <div class="col-md-6">
                     <div class="form-group">
-                        <label>Mannschafts Name</label>
+                        <label>Mannschafts Name:</label>
                         <h:outputText class="form-control" value="#{statistikBean.mannschaftNeu.getMannschaftsName()}"/>
                     </div>
                     <div class="form-group">
-                        <label>Anzahl Fans</label>
+                        <label>Anzahl der Fans:</label>
                         <h:outputText class="form-control"
                                       value="#{statistikBean.mannschaftNeu.getAnzahlMitgliederFanClub()}"/>
                     </div>
                 <div class="form-group">
-                    <label>Ungeschlagen Seit:</label>
+                    <label>Ungeschlagen Seit (Anzahl Spiele):</label>
                     <h:outputText class="form-control"
                                   value="#{statistikBean.statistik.ungeschlagenSeitAnzahlSpiele}"/>
                 </div>
                 <div class="form-group">
-                    <label>Sieges Serie</label>
+                    <label>Siege in Serie (Anzahl Spiele):</label>
                     <h:outputText class="form-control" value="#{statistikBean.statistik.siegesSerie}"/>
                 </div>
                 <div class="form-group">
-                <label>beste Tordifferenz:</label>
+                <label>Beste Tordifferenz (Pro Spiel):</label>
                 <h:outputText class="form-control" value="#{statistikBean.statistik.besteTordifferenz}"/>
             </div>
                 <div class="form-group">
-                    <label>Tore pro SPiel:</label>
-                    <h:outputText class="form-control" value="#{statistikBean.statistik.toreProSpiel}"/>
+                    <label>Tore im Durchschnitt (Pro Spiel):</label>
+                    <h:outputText class="form-control" value="#{statistikBean.toreProSpielRounded}"/>
                 </div>
 
                 <div class="form-group">
-                    <label>Punkte pro Spiel:</label>
-                    <h:outputText class="form-control" value="#{statistikBean.statistik.punkteProSpiel}"/>
+                    <label>Punkte im Durchschnitt (Pro Spiel):</label>
+                    <h:outputText class="form-control" value="#{statistikBean.punkteProSpielRounded}"/>
                 </div>
 
             </div>

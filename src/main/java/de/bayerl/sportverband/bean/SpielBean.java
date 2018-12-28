@@ -15,10 +15,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.OneToOne;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @Named
 @SessionScoped
@@ -85,13 +82,39 @@ public class SpielBean implements Serializable {
     private List<Spiel> spiele;
 
     public List<Spiel> createHR(){
-        this.ligaNameAnzeigen = this.ligaName;
-        return spServ.createHR(this.ligaName);
+        if (spServ.getSpieleByLigaName(this.ligaName).size()== 0){
+            if(ligen.size()> 0) {
+             this.ligaNameAnzeigen = this.ligaName;
+             try {
+                 return spServ.createHR(this.ligaName);
+             } catch (Exception e){
+                 System.out.println("Could not create Spiele");
+                 return null;
+             }
+           } else {
+              return null;
+          }
+        } else {
+            return null;
+        }
     }
 
     public List<Spiel> createHRRR(){
-        this.ligaNameAnzeigen = this.ligaName;
-        return spServ.createHRRR(this.ligaName);
+        if (spServ.getSpieleByLigaName(this.ligaName).size()== 0) {
+            if (ligen.size() > 0) {
+                this.ligaNameAnzeigen = this.ligaName;
+                try {
+                    return spServ.createHRRR(this.ligaName);
+                } catch(Exception e){
+                    System.out.println("Could not create Spiele");
+                    return null;
+                }
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
     }
 
     public String getMannschaftHeimName(){
@@ -103,19 +126,31 @@ public class SpielBean implements Serializable {
     }
 
     public Spiel tragePunkteEin (Spiel m){
-        Spiel s = spServ.tragePunkteEin(m.getId(), this.trefferHeimErsteHalbzeit,
-                this.trefferHeimEnde,
-                this.trefferGastErsteHalbzeit, this.trefferGastEnde, true);
-        this.trefferGastEnde = null;
-        this.trefferGastErsteHalbzeit = null;
-        this.trefferHeimEnde = null;
-        this.trefferHeimErsteHalbzeit = null;
-        this.mannschaftHeim = s.getMannschaftHeim();
-        this.mannschaftGast = s.getMannschaftGast();
-        tabPosServ.trageDatenInTabellenpositionEin(this.mannschaftHeim);
-        tabPosServ.trageDatenInTabellenpositionEin(this.mannschaftGast);
-        this.spiele = spServ.getSpieleByLigaName(this.ligaNameAnzeigen);
-        return s;
+        if(m.getStadionId()!= null){
+            if(this.trefferHeimEnde>= this.trefferHeimErsteHalbzeit && this.trefferGastEnde>=this.trefferGastErsteHalbzeit) {
+                Spiel s = spServ.tragePunkteEin(m.getId(), this.trefferHeimErsteHalbzeit,
+                        this.trefferHeimEnde,
+                        this.trefferGastErsteHalbzeit, this.trefferGastEnde, true);
+                this.mannschaftHeim = s.getMannschaftHeim();
+                this.mannschaftGast = s.getMannschaftGast();
+                tabPosServ.trageDatenInTabellenpositionEin(this.mannschaftHeim);
+                tabPosServ.trageDatenInTabellenpositionEin(this.mannschaftGast);
+                this.spiele = spServ.getSpieleByLigaName(this.ligaNameAnzeigen);
+                this.trefferGastEnde = null;
+                this.trefferGastErsteHalbzeit = null;
+                this.trefferHeimEnde = null;
+                this.trefferHeimErsteHalbzeit = null;
+                return s;
+            } else {
+                this.trefferGastEnde = null;
+                this.trefferGastErsteHalbzeit = null;
+                this.trefferHeimEnde = null;
+                this.trefferHeimErsteHalbzeit = null;
+                return null;
+            }
+        } else {
+            return null;
+        }
     }
 
     public List <Spiel> spieleAnzeigen(){
@@ -130,11 +165,29 @@ public class SpielBean implements Serializable {
         // returns true if ok...
         Random r = new Random();
         this.stadionId = 100L + r.nextLong();
+        List <Spiel> spieleHeim = spServ.getSpieleEinerMannschaft(m.getMannschaftHeim());
+        List <Spiel> spieleGast = spServ.getSpieleEinerMannschaft(m.getMannschaftHeim());
+        List <Spiel> alleSpiele = new ArrayList<Spiel>(spieleHeim);
+        alleSpiele.addAll(spieleGast);
+        boolean checker = true;
+        long minuteInMillis = 60000;
+        for(int i = 0; i< alleSpiele.size(); i++){
+            if(alleSpiele.get(i).getDatum()!= null) {
+                long t = alleSpiele.get(i).getDatum().getTime() + ((45 * 2) + 15 + 10 + 10) * minuteInMillis;
+                Date afterAddingMinutes = new Date(t);
+                if (!afterAddingMinutes.before(this.datum)) {
+                    checker = false;
+                }
+            }
+        }
+        if(checker){
         Spiel s = spServ.trageStadionEin(m.getId(), this.datum, this.stadionId);
         this.spiele = spServ.getSpieleByLigaName(this.ligaNameAnzeigen);
-
-
+        this.datum = null;
         return s;
+        } else {
+            return null;
+        }
     }
 
     public void init(){

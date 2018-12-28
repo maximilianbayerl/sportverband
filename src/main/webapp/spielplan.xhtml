@@ -15,7 +15,7 @@
         <ui:define name="pageContent">
             <div class="container">
             <div class="col-md-6 col-md-offset-3">
-                <h:form id="createHR">
+                <h:form id="createHR" rendered="#{loginBean.isAdmindLoggedIn()}">
                     <div class="form-group">
                         <label>Liga</label>
                         <h:selectOneMenu id="LigaHR" value="#{spielBean.ligaName}">
@@ -27,7 +27,7 @@
                                    />
                     
               </h:form>
-                <h:form id="createRR">
+                <h:form id="createRR" rendered="#{loginBean.isAdmindLoggedIn()}">
                     <div class="form-group">
                         <label>Liga</label>
                         <h:selectOneMenu id="LigaRR" value="#{spielBean.ligaName}">
@@ -116,7 +116,7 @@
                                 <h:outputText value="#{spiel.stadionId}"></h:outputText>
                                 Zeit:
                                 <h:outputText value="#{spiel.datum}"></h:outputText>
-                                <h:form>
+                                <h:form rendered="#{loginBean.isAdmindLoggedIn()}">
                                     <div class="form-group">
                                         <label>Datum</label>
                                         <h:inputText value="#{spielBean.datum}">
@@ -128,7 +128,7 @@
                                                   action="#{spielBean.bucheStadion(spiel)}"/>
                             </h:form>
                             </h:column>
-                            <h:column>
+                            <h:column rendered="#{loginBean.isAdmindLoggedIn()}">
                                 <f:facet name="header">
                                     Tore:
                                 </f:facet>

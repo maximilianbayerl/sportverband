@@ -50,7 +50,15 @@ public class StatistikBean implements Serializable {
 
     @Getter
     @Setter
+    private String toreProSpielRounded;
+
+    @Getter
+    @Setter
     private Double punkteProSpiel;
+
+    @Getter
+    @Setter
+    private String punkteProSpielRounded;
 
     @Getter
     @Setter
@@ -70,7 +78,12 @@ public class StatistikBean implements Serializable {
         this.mannschafter = manBean.getMannschaftStat();
         this.mannschaftNeu = manServ.getMannschaftByMannschaftsName(this.mannschafter);
         this.statistik = statServ. getStatistikByMannschaft(this.mannschaftNeu);
-
+        if(this.statistik.getToreProSpiel() != null){
+            this.toreProSpielRounded = String.format("%.2f", this.statistik.getToreProSpiel());
+        }
+        if(this.statistik.getPunkteProSpiel() != null){
+            this.punkteProSpielRounded = String.format("%.2f", this.statistik.getPunkteProSpiel());
+        }
     }
 
 }

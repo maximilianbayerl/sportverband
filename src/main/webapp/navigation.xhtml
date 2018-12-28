@@ -12,7 +12,7 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </button>
-                        <a class="navbar-brand" href="#">Sportverband</a>
+                        <a class="navbar-brand" href="index.xhtml">Sportverband</a>
                     </div>
                     <div class="collapse navbar-collapse" id="myNavbar">
                         <ul class='nav navbar-nav navbar-left'>
@@ -20,6 +20,11 @@
                             <li><h:outputLink  value="spielplan.xhtml">Spielplan</h:outputLink></li>
                             <li><h:outputLink  value="tabelle.xhtml">Tabelle</h:outputLink></li>
                             </ul>
+                        <ul class="nav navbar-nav navbar-right">
+                        <c:if test="#{loginBean.isAdmindLoggedIn()}">
+                            <li><h:commandLink value="Logout" action="#{loginBean.logout()}"/></li>
+                        </c:if>
+                    </ul>
                     </div>         
 		</div>
 	</nav>

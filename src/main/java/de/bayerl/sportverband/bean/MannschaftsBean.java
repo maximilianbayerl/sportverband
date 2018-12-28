@@ -77,10 +77,14 @@ public class MannschaftsBean implements Serializable {
     }
 
     public Mannschaft createMannschaft(){
-        Mannschaft m = manServ.create(this.mannschaftsName, this.anzahlMitgliederFanClub);
-        this.ownTabellenPosition = m.getTabellenPosition();
-        tabServ.addTabellenpositionenToTabelle(this.ownTabellenPosition, this.ligaName);
-        return m;
+        if(this.ligen.size()>0) {
+            Mannschaft m = manServ.create(this.mannschaftsName, this.anzahlMitgliederFanClub);
+            this.ownTabellenPosition = m.getTabellenPosition();
+            tabServ.addTabellenpositionenToTabelle(this.ownTabellenPosition, this.ligaName);
+            return m;
+        } else {
+            return null;
+        }
     }
     public void init(){
         this.mannschaftStat = null;
@@ -95,7 +99,6 @@ public class MannschaftsBean implements Serializable {
 
     public String zeigeStatistik(String m){
         this.mannschaftStat = m;
-        System.out.println(m);
         return "statistik.xhtml?faces-redirect=true";
     }
 }

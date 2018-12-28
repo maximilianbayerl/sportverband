@@ -8,6 +8,7 @@ import de.bayerl.sportverband.entity.Spiel;
 import javax.enterprise.context.RequestScoped;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
+import java.util.Collections;
 import java.util.List;
 
 @RequestScoped
@@ -30,10 +31,9 @@ public class SpielplanRepository extends SingleIdEntityRepository<Spiel> {
         Query q = this.getEntityManager().createQuery("Select s FROM Spiel as s WHERE s.ligaName="+
                 ":ligaName");
         q.setParameter("ligaName", name);
-        System.out.println(name);
         List<Spiel> spiele = q.getResultList();
         if(spiele.isEmpty()){
-            return null;
+            return Collections.emptyList();
         } else {
             return spiele;
         }

@@ -50,15 +50,19 @@ public class TabellenBean implements Serializable {
     private List<Tabellenposition> tabellenpositionen;
 
     public Tabelle createTabelle(){
-        this.ligaNameAnzeigen = this.ligaName;
-        Tabelle t = tabServ.createTabelle(this.ligaName, this.saison);
-        List<String> ligen = new ArrayList<>();
-        List <Tabelle> ligas = tabServ.getAlle();
-        for(int i = 0; i< ligas.size(); i++){
-            ligen.add(ligas.get(i).getLigaName());
+        if(this.ligaName != null && this.saison != null) {
+            this.ligaNameAnzeigen = this.ligaName;
+            Tabelle t = tabServ.createTabelle(this.ligaName, this.saison);
+            List<String> ligen = new ArrayList<>();
+            List<Tabelle> ligas = tabServ.getAlle();
+            for (int i = 0; i < ligas.size(); i++) {
+                ligen.add(ligas.get(i).getLigaName());
+            }
+            this.ligen = ligen;
+            return t;
+        } else {
+            return null;
         }
-        this.ligen = ligen;
-        return t;
     }
 
     public List<Tabellenposition> getAllTabellenpositionen(Tabelle t){
@@ -85,10 +89,11 @@ public class TabellenBean implements Serializable {
         }
     }
     public void anzeigenByLigaName(){
-        Tabelle t = findTabelleByLigaName(this.ligaNameAnzeigen);
-        System.out.println(this.ligaNameAnzeigen);
-        if(this.ligaNameAnzeigen != null){
-            this.tabellenpositionen = sortTabelle(getAllTabellenpositionen(t));
+        if(this.ligen.size()>0) {
+            Tabelle t = findTabelleByLigaName(this.ligaNameAnzeigen);
+            if (this.ligaNameAnzeigen != null) {
+                this.tabellenpositionen = sortTabelle(getAllTabellenpositionen(t));
+            }
         }
     }
 

@@ -9,6 +9,7 @@ import de.bayerl.sportverband.repository.StatistikRepository;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.jws.WebService;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -23,6 +24,7 @@ public class StatistikService {
 
     @Inject
     StatistikRepository statRep;
+
 
     public void aktualisiereStatistik (Mannschaft m){
         int ungeschlagenSeitAnzahlSpiele = 0;
@@ -114,7 +116,6 @@ public class StatistikService {
                     anzahlAbsolvierteSpieleGesamt ++;
                     schnittToreProSpiel =(float) anzahlTore / anzahlAbsolvierteSpieleGesamt;
                     schnittPunkteProSpiel = (float) punkte / anzahlAbsolvierteSpieleGesamt;
-
                 }
             }
         }

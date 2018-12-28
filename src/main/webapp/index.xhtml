@@ -8,6 +8,25 @@
             <ui:include src="navigation.xhtml">
             </ui:include>        
         </ui:define>
-        <ui:define name="pageContent"></ui:define>
+        <ui:define name="pageContent">
+            <div class="container">
+                <div class="col-md-6 col-md-offset-3">
+                    <h:form id="loginForm" rendered="#{!loginBean.isAdmindLoggedIn()}">
+                        <div class="form-group">
+                            <label>E-Mail</label>
+                            <h:inputText class="form-control" value="#{loginBean.email}"/>
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <h:inputSecret class="form-control" value="#{loginBean.password}"/>
+                        </div>
+                        <h:commandButton id="loginVal" class="btn btn-success btn-lg btn-block"
+                                         action="#{loginBean.validateCredentials}" type="submit" value="Login"/>
+
+                    </h:form>
+
+                </div>
+            </div>
+        </ui:define>
     </ui:composition>
 </html>
