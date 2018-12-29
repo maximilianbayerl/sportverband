@@ -3,30 +3,31 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
-    <h:form>
-        <nav class='navbar navbar-default'>
-		<div class='container-fluid'>
-                    <div class="navbar-header">
-                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                        </button>
-                        <a class="navbar-brand" href="index.xhtml">Sportverband</a>
-                    </div>
-                    <div class="collapse navbar-collapse" id="myNavbar">
-                        <ul class='nav navbar-nav navbar-left'>
-                            <li><h:outputLink value="mannschaften.xhtml">Mannschaften</h:outputLink></li>
-                            <li><h:outputLink  value="spielplan.xhtml">Spielplan</h:outputLink></li>
-                            <li><h:outputLink  value="tabelle.xhtml">Tabelle</h:outputLink></li>
-                            </ul>
-                        <ul class="nav navbar-nav navbar-right">
-                        <c:if test="#{loginBean.isAdmindLoggedIn()}">
-                            <li><h:commandLink value="Logout" action="#{loginBean.logout()}"/></li>
-                        </c:if>
-                    </ul>
-                    </div>         
+<h:form>
+    <nav class='navbar navbar-default'>
+        <div class='container-fluid'>
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="index.xhtml">Sportverband</a>
+            </div>
+            <div class="collapse navbar-collapse" id="myNavbar">
+                <ul class='nav navbar-nav navbar-left'>
+                    <li><h:outputLink value="mannschaften.xhtml">Mannschaften</h:outputLink></li>
+                    <li><h:outputLink  value="spielplan.xhtml">Spielplan</h:outputLink></li>
+                    <li><h:outputLink  value="tabelle.xhtml">Tabelle</h:outputLink></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <c:if test="#{loginBean.isAdmindLoggedIn()}">
+                        <li><h:commandLink value="Logout" action="#{loginBean.logout()}"/></li>
+                    </c:if>
+                </ul>
+            </div>
 		</div>
-	</nav>
-    </h:form>    
+    </nav>
+</h:form>
 </html>

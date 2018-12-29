@@ -5,12 +5,10 @@ import de.bayerl.sportverband.repository.MannschaftsRepository;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.jws.WebService;
 import javax.transaction.Transactional;
 import java.util.List;
 
 @RequestScoped
-@WebService
 public class MannschaftsService {
     @Inject
    private MannschaftsRepository manRep;
@@ -30,9 +28,10 @@ public class MannschaftsService {
         return "Mannschaft successfully deleted";
     }
 
+
     @Transactional
-    public Mannschaft getMannschaftByMannschaftsName(String mannschaftsName){
-        return manRep.findByName(mannschaftsName);
+    public Mannschaft changeMannschaft (Mannschaft mannschaft){
+       return manRep.merge(mannschaft);
     }
 
     @Transactional

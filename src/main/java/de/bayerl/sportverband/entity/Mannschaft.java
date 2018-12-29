@@ -1,20 +1,16 @@
 package de.bayerl.sportverband.entity;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.*;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
 
 import lombok.Getter;
 import lombok.Setter;
 
-@XmlRootElement
-@XmlAccessorType(XmlAccessType.FIELD)
+
 @Entity
 public class Mannschaft extends BasisEntity implements Serializable {
 
-    @Column(nullable = false)
     @Getter
     @Setter
     private String mannschaftsName;
@@ -32,6 +28,16 @@ public class Mannschaft extends BasisEntity implements Serializable {
     @Getter
     @Setter
     private Tabellenposition tabellenPosition;
+
+    @OneToMany(mappedBy = "mannschaftGast", cascade = CascadeType.REMOVE )
+    @Getter
+    @Setter
+    private List<Spiel> spielGast;
+
+    @OneToMany(mappedBy = "mannschaftHeim", cascade = CascadeType.REMOVE )
+    @Getter
+    @Setter
+    private  List<Spiel> spielHeim;
 
     public Mannschaft () {
 

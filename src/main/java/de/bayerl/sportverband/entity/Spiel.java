@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.Entity;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -14,7 +14,7 @@ public class Spiel extends BasisEntity implements Serializable {
 
     @Getter
     @Setter
-    @OneToOne()
+    @ManyToOne()
     private Mannschaft mannschaftHeim;
 
     @Getter
@@ -27,7 +27,7 @@ public class Spiel extends BasisEntity implements Serializable {
 
     @Getter
     @Setter
-    @OneToOne()
+    @ManyToOne()
     private Mannschaft mannschaftGast;
 
     @Getter

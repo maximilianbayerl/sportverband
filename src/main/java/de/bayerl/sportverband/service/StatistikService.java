@@ -8,15 +8,12 @@ import de.bayerl.sportverband.repository.StatistikRepository;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.jws.WebService;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 
 @RequestScoped
-@WebService
 public class StatistikService {
 
     @Inject

@@ -1,6 +1,5 @@
 package de.bayerl.sportverband.bean;
 
-
 import de.bayerl.sportverband.entity.Mannschaft;
 import de.bayerl.sportverband.entity.Spiel;
 import de.bayerl.sportverband.entity.Tabelle;
@@ -10,15 +9,15 @@ import de.bayerl.sportverband.service.TabellenService;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.persistence.OneToOne;
 import java.io.Serializable;
 import java.util.*;
 
 @Named
-@SessionScoped
+@ApplicationScoped
 public class SpielBean implements Serializable {
     @Inject
     SpielplanService spServ;
@@ -117,14 +116,6 @@ public class SpielBean implements Serializable {
         }
     }
 
-    public String getMannschaftHeimName(){
-        return this.getMannschaftHeim().getMannschaftsName();
-    }
-
-    public String getMannschaftGastmName(){
-        return this.getMannschaftGast().getMannschaftsName();
-    }
-
     public Spiel tragePunkteEin (Spiel m){
         if(m.getStadionId()!= null){
             if(this.trefferHeimEnde>= this.trefferHeimErsteHalbzeit && this.trefferGastEnde>=this.trefferGastErsteHalbzeit) {
@@ -175,7 +166,7 @@ public class SpielBean implements Serializable {
             if(alleSpiele.get(i).getDatum()!= null) {
                 long t = alleSpiele.get(i).getDatum().getTime() + ((45 * 2) + 15 + 10 + 10) * minuteInMillis;
                 Date afterAddingMinutes = new Date(t);
-                if (!afterAddingMinutes.before(this.datum)) {
+                if (!afterAddingMinutes.before(this.datum) && !alleSpiele.get(i).getDatum().after(this.datum)) {
                     checker = false;
                 }
             }

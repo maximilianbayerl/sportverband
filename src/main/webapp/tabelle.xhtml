@@ -40,12 +40,12 @@
                                 <f:selectItems value="#{tabellenBean.ligen}" />
                             </h:selectOneMenu>
                         </div>
-                        <h:commandButton value="Tabelle für Liga anzeigen:" class="btn btn-success btn-lg btn-block"
+                        <h:commandButton value="Tabelle für Liga aktualisieren und anzeigen:"
+                                         class="btn btn-success btn-lg btn-block"
                                          action="#{tabellenBean.anzeigenByLigaName()}"/>
                     </h:form>
                 </div>
             </div>
-
             <div class="container">
             <div class="row">
                 <div class="col-md-10 col-md-offset-1">
@@ -117,7 +117,6 @@
                 </div>
             </div>
             </div>
-
         </ui:define>
     </ui:composition>
 </html>

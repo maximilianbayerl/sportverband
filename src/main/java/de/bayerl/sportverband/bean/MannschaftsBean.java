@@ -1,35 +1,33 @@
 package de.bayerl.sportverband.bean;
 
 
-import de.bayerl.sportverband.entity.Mannschaft;
-import de.bayerl.sportverband.entity.Statistik;
-import de.bayerl.sportverband.entity.Tabelle;
-import de.bayerl.sportverband.entity.Tabellenposition;
+import de.bayerl.sportverband.entity.*;
 import de.bayerl.sportverband.service.MannschaftsService;
+import de.bayerl.sportverband.service.SpielplanService;
 import de.bayerl.sportverband.service.TabellenService;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.SessionScoped;
-import javax.faces.bean.ManagedProperty;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.persistence.CascadeType;
-import javax.persistence.OneToOne;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Named
-@SessionScoped
+@ApplicationScoped
 public class MannschaftsBean implements Serializable {
     @Inject
     MannschaftsService manServ;
 
     @Inject
     TabellenService tabServ;
+
+    @Inject
+    SpielplanService spServ;
 
     @Getter
     @Setter
@@ -70,7 +68,7 @@ public class MannschaftsBean implements Serializable {
 
     @Getter
     @Setter
-    private String mannschaftStat;
+    private Long mannschaftStat;
 
     public List<Mannschaft> getMannschaften(){
         return manServ.getMannschaften();
@@ -80,8 +78,14 @@ public class MannschaftsBean implements Serializable {
         if(this.ligen.size()>0) {
             Mannschaft m = manServ.create(this.mannschaftsName, this.anzahlMitgliederFanClub);
             this.ownTabellenPosition = m.getTabellenPosition();
-            tabServ.addTabellenpositionenToTabelle(this.ownTabellenPosition, this.ligaName);
-            return m;
+            List <Spiel> spiele = spServ.getSpieleByLigaName(this.ligaName);
+            if(spiele.size() == 0) {
+                tabServ.addTabellenpositionenToTabelle(this.ownTabellenPosition, this.ligaName);
+                return m;
+            } else {
+                manServ.deleteMannschaft(m);
+                return null;
+            }
         } else {
             return null;
         }
@@ -97,7 +101,7 @@ public class MannschaftsBean implements Serializable {
 
     }
 
-    public String zeigeStatistik(String m){
+    public String zeigeStatistik(Long m){
         this.mannschaftStat = m;
         return "statistik.xhtml?faces-redirect=true";
     }

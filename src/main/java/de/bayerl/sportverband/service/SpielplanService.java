@@ -7,13 +7,11 @@ import de.bayerl.sportverband.repository.SpielplanRepository;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.jws.WebService;
 import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
 
 @RequestScoped
-@WebService
 public class SpielplanService {
     @Inject
     MannschaftsService mannschaftsService;
@@ -72,16 +70,6 @@ public class SpielplanService {
         return spRep.merge(s);
     }
 
-
-    @Transactional
-    public String deleteSpiel(Spiel spiel){
-        spRep.remove(spiel.getId());
-        return "Spiel successfully deleted";
-    }
-
-    @Transactional
-    public List<Spiel> getSpiele() {return spRep.findAll();}
-
     @Transactional
     public List<Spiel> getSpieleByLigaName(String ligaName) {return spRep.findByLigaName(ligaName); }
 
@@ -90,10 +78,6 @@ public class SpielplanService {
         return spRep.findByMannschaft(m);
     }
 
-    @Transactional
-    public Spiel getSpielByID(Long id){
-        return spRep.findById(id);
-    }
 
 }
 

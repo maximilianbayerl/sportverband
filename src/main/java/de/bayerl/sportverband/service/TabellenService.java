@@ -1,6 +1,5 @@
 package de.bayerl.sportverband.service;
 
-import de.bayerl.sportverband.entity.Mannschaft;
 import de.bayerl.sportverband.entity.Tabelle;
 import de.bayerl.sportverband.entity.Tabellenposition;
 import de.bayerl.sportverband.repository.TabellenPositionRepository;
@@ -8,18 +7,12 @@ import de.bayerl.sportverband.repository.TabellenRepository;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.jws.WebService;
 import javax.transaction.Transactional;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
 @RequestScoped
-@WebService
 public class TabellenService {
-    @Inject
-    MannschaftsService mannschaftsService;
 
     @Inject
     private TabellenPositionRepository tabPosRep;

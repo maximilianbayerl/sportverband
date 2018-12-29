@@ -5,7 +5,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
 
 @Entity
 public class Tabellenposition extends BasisEntity implements Serializable {
@@ -58,12 +57,6 @@ public class Tabellenposition extends BasisEntity implements Serializable {
 
     public Tabellenposition(){
 
-    }
-
-    public Tabellenposition(Tabelle t){
-        List <Tabellenposition> m = t.getTabellenPositionen();
-        m.add(this);
-        t.setTabellenPositionen(m);
     }
 
     public Tabellenposition(Integer anzahlSiege, Integer anzahlNiederlage,

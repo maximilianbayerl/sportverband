@@ -5,10 +5,10 @@ import de.bayerl.sportverband.entity.Tabellenposition;
 import de.bayerl.sportverband.service.Sortbyroll;
 import de.bayerl.sportverband.service.TabellenPositionService;
 import de.bayerl.sportverband.service.TabellenService;
-import javafx.scene.control.Tab;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -16,7 +16,7 @@ import java.io.Serializable;
 import java.util.*;
 
 @Named
-@SessionScoped
+@ApplicationScoped
 public class TabellenBean implements Serializable {
     @Inject
     TabellenService tabServ;
@@ -91,7 +91,13 @@ public class TabellenBean implements Serializable {
     public void anzeigenByLigaName(){
         if(this.ligen.size()>0) {
             Tabelle t = findTabelleByLigaName(this.ligaNameAnzeigen);
-            if (this.ligaNameAnzeigen != null) {
+            if (t != null) {
+                List <Tabellenposition>test = tabServ.getAllTabellenpositionen(t);
+                if(test != null) {
+                    for (int i = 0; i < test.size(); i++) {
+                        tabPosServ.trageDatenInTabellenpositionEin(test.get(i).getMannschaft());
+                    }
+                }
                 this.tabellenpositionen = sortTabelle(getAllTabellenpositionen(t));
             }
         }

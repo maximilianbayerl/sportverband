@@ -6,7 +6,6 @@ import de.bayerl.sportverband.entity.Tabellenposition;
 import javax.enterprise.context.RequestScoped;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
-import java.util.Collection;
 import java.util.List;
 
 @RequestScoped

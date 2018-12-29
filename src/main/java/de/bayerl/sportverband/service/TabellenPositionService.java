@@ -2,22 +2,16 @@ package de.bayerl.sportverband.service;
 
 import de.bayerl.sportverband.entity.Mannschaft;
 import de.bayerl.sportverband.entity.Spiel;
-import de.bayerl.sportverband.entity.Statistik;
 import de.bayerl.sportverband.entity.Tabellenposition;
 import de.bayerl.sportverband.repository.SpielplanRepository;
 import de.bayerl.sportverband.repository.TabellenPositionRepository;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.jws.WebService;
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 @RequestScoped
-@WebService
 public class TabellenPositionService {
 
     @Inject
@@ -29,16 +23,10 @@ public class TabellenPositionService {
     @Inject
     private StatistikService statServ;
 
-
-    public Tabellenposition getTabellenPositionOfMannschaft(Mannschaft m){
-       return m.getTabellenPosition();
-    }
-
     @Transactional
     public Tabellenposition trageDatenInTabellenpositionEin(Mannschaft m){
         List<Spiel> spiele = spRep.findByMannschaft(m);
         Tabellenposition aktuellePosition = m.getTabellenPosition();
-        System.out.println(aktuellePosition);
         int anzahlSiege = 0;
         int anzahlUnentschieden = 0;
         int anzahlNiederlage = 0;
