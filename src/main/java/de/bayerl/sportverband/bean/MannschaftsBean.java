@@ -61,10 +61,6 @@ public class MannschaftsBean implements Serializable {
 
     @Getter
     @Setter
-    private List<Mannschaft> mannschaften;
-
-    @Getter
-    @Setter
     private Tabelle selectedLiga;
 
     @Getter
@@ -75,11 +71,11 @@ public class MannschaftsBean implements Serializable {
     @Setter
     private Long mannschaftStat;
 
-    public List<Mannschaft> getAlleMannschaften(){
+    public List<Mannschaft> getMannschaften(){
         return manServ.getMannschaften();
     }
 
-    public void createMannschaft(){
+    public Mannschaft createMannschaft(){
         if(this.ligen.size()>0) {
             Mannschaft m = manServ.create(this.mannschaftsName, this.anzahlMitgliederFanClub);
             this.ownTabellenPosition = m.getTabellenPosition();
@@ -87,25 +83,29 @@ public class MannschaftsBean implements Serializable {
             if(spiele.size() == 0) {
                 if(this.anzahlMitgliederFanClub>=100 && this.anzahlMitgliederFanClub <= 1000000){
                     tabServ.addTabellenpositionenToTabelle(this.ownTabellenPosition, this.selectedLiga.getLigaName());
+                    return m;
                 }else {
                     FacesContext.getCurrentInstance().addMessage("mannschaftForm:createMannschaft", new FacesMessage(
                             "Bitte geben sie einen Wert im Feld Anzahl der Fans zwischen 100 und 1.000.000 ein."));
                     manServ.deleteMannschaft(m);
+                    return null;
                 }
             } else {
                 FacesContext.getCurrentInstance().addMessage("mannschaftForm:createMannschaft", new FacesMessage(
                         "Dieser Liga können keine weiteren Mannschaften hinzugefügt werden, da bereits ein Spielplan " +
                                 "erstellt wurde."));
                 manServ.deleteMannschaft(m);
+                return null;
             }
         } else {
             FacesContext.getCurrentInstance().addMessage("mannschaftForm:createMannschaft", new FacesMessage(
                     "Bitte zuerste eine Liga erstellen in der die Mannschaft angelegt werden soll."));
+            return null;
         }
     }
     public void init(){
         this.mannschaftStat = null;
-        this.mannschaften = getAlleMannschaften();
+        getMannschaften();
         this.ligen = tabServ.getAlle();
     }
 
