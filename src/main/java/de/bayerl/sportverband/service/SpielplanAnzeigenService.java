@@ -3,6 +3,9 @@ package de.bayerl.sportverband.service;
 import de.bayerl.sportverband.entity.Mannschaft;
 import de.bayerl.sportverband.entity.Spiel;
 import de.bayerl.sportverband.repository.SpielplanRepository;
+import org.apache.logging.log4j.Logger;
+import utils.qualifiers.OptionMannschaft;
+import utils.qualifiers.OptionSpielplanAnzeigen;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -17,6 +20,10 @@ public class SpielplanAnzeigenService {
 
     @Inject
     private SpielplanRepository spRep;
+
+    @Inject
+    @OptionSpielplanAnzeigen
+    private Logger logger;
 
     @Transactional
     public List<Spiel> getSpiele() {return spRep.findAll();}

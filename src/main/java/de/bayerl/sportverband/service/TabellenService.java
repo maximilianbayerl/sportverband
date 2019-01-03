@@ -4,6 +4,8 @@ import de.bayerl.sportverband.entity.Tabelle;
 import de.bayerl.sportverband.entity.Tabellenposition;
 import de.bayerl.sportverband.repository.TabellenPositionRepository;
 import de.bayerl.sportverband.repository.TabellenRepository;
+import org.apache.logging.log4j.Logger;
+import utils.qualifiers.OptionTabelle;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -20,17 +22,22 @@ public class TabellenService {
     @Inject
     private TabellenRepository tabRep;
 
+    @Inject
+    @OptionTabelle
+    private Logger logger;
+
     @Transactional
-    public Tabelle createTabelle(String ligaName, Date saison){
-        Tabelle tab = new Tabelle(ligaName, saison);
+    public Tabelle createTabelle(String ligaName){
+        Tabelle tab = new Tabelle(ligaName);
+        logger.info("Neue Tabelle " + ligaName + " erstellt.");
         return tabRep.persist(tab);
     }
 
     @Transactional
     public Tabelle addTabellenpositionenToTabelle(Tabellenposition tabpos, String ligaName){
         Tabelle t = tabRep.findByName(ligaName);
-        System.out.println(tabpos);
         t.addTabellenPosition(tabpos);
+        logger.info("Mannschaft zu Tabelle "+ ligaName + " hinzugefügt.");
         return tabRep.merge(t);
     }
 
@@ -49,6 +56,7 @@ public class TabellenService {
         return tabRep.findAll();
     }
 
+    @Transactional
+    public Tabelle getTabelleById(long id){return tabRep.findById(id);}
 
-//todo: delete tabelle, change...
 }

@@ -2,6 +2,8 @@ package de.bayerl.sportverband.service;
 
 import de.bayerl.sportverband.entity.Mannschaft;
 import de.bayerl.sportverband.repository.MannschaftsRepository;
+import org.apache.logging.log4j.Logger;
+import utils.qualifiers.OptionMannschaft;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -11,6 +13,10 @@ import java.util.List;
 @RequestScoped
 public class MannschaftsService {
     @Inject
+    @OptionMannschaft
+    private Logger logger;
+
+    @Inject
    private MannschaftsRepository manRep;
 
     @Transactional
@@ -19,19 +25,22 @@ public class MannschaftsService {
         m.createTabellenPosition();
         m.createStatistik();
         manRep.persist(m);
+        logger.info("Neue Mannschaft erstellt: " +  m.getMannschaftsName());
         return m;
     }
 
     @Transactional
     public String deleteMannschaft(Mannschaft mannschaft){
        manRep.remove(mannschaft.getId());
-        return "Mannschaft successfully deleted";
+       logger.info("Mannschaft erfolgreich gelöscht.");
+        return "Mannschaft erfolgreich gelöscht.";
     }
 
 
     @Transactional
     public Mannschaft changeMannschaft (Mannschaft mannschaft){
-       return manRep.merge(mannschaft);
+        logger.info("Mannschaft erfolgreich aktualisiert.");
+        return manRep.merge(mannschaft);
     }
 
     @Transactional

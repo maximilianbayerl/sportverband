@@ -1,22 +1,25 @@
 package de.bayerl.sportverband.bean;
 
+import de.bayerl.sportverband.converter.TabellenConverter;
 import de.bayerl.sportverband.entity.Tabelle;
 import de.bayerl.sportverband.entity.Tabellenposition;
 import de.bayerl.sportverband.service.Sortbyroll;
 import de.bayerl.sportverband.service.TabellenPositionService;
 import de.bayerl.sportverband.service.TabellenService;
+import javafx.scene.control.Tab;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.util.*;
 
 @Named
-@ApplicationScoped
+@SessionScoped
 public class TabellenBean implements Serializable {
     @Inject
     TabellenService tabServ;
@@ -24,22 +27,22 @@ public class TabellenBean implements Serializable {
     @Inject
     TabellenPositionService tabPosServ;
 
+    @Inject
+    @Getter
+    @Setter
+    TabellenConverter tabConv;
+
     @Getter
     @Setter
     private String ligaName;
 
     @Getter
     @Setter
-    private List <String> ligen;
+    private List <Tabelle> ligen;
 
     @Getter
     @Setter
-    private String ligaNameAnzeigen;
-
-
-    @Getter
-    @Setter
-    private Date saison;
+    private Tabelle selectedLiga;
 
     @Getter
     @Setter
@@ -50,17 +53,21 @@ public class TabellenBean implements Serializable {
     private List<Tabellenposition> tabellenpositionen;
 
     public Tabelle createTabelle(){
-        if(this.ligaName != null && this.saison != null) {
-            this.ligaNameAnzeigen = this.ligaName;
-            Tabelle t = tabServ.createTabelle(this.ligaName, this.saison);
-            List<String> ligen = new ArrayList<>();
-            List<Tabelle> ligas = tabServ.getAlle();
-            for (int i = 0; i < ligas.size(); i++) {
-                ligen.add(ligas.get(i).getLigaName());
+        if(this.ligaName != null) {
+            List <Tabelle> tabellen = tabServ.getAlle();
+            for (int i =0; i<tabellen.size(); i++){
+                if(tabellen.get(i).getLigaName().equals(this.ligaName)){
+                    FacesContext.getCurrentInstance().addMessage("tabellenForm", new FacesMessage(
+                            "Es gibt bereits eine Tabelle mit diesem Namen, bitte Eingabe verändern."));
+                    return null;
+                }
             }
-            this.ligen = ligen;
-            return t;
+            this.selectedLiga = tabServ.createTabelle(this.ligaName);
+            this.ligen = tabServ.getAlle();
+            return this.selectedLiga;
         } else {
+            FacesContext.getCurrentInstance().addMessage("tabellenForm", new FacesMessage(
+                    "Es wird mindestens ein Zeichen als Tabellenname benötigt."));
             return null;
         }
     }
@@ -90,7 +97,7 @@ public class TabellenBean implements Serializable {
     }
     public void anzeigenByLigaName(){
         if(this.ligen.size()>0) {
-            Tabelle t = findTabelleByLigaName(this.ligaNameAnzeigen);
+            Tabelle t = findTabelleByLigaName(this.selectedLiga.getLigaName());
             if (t != null) {
                 List <Tabellenposition>test = tabServ.getAllTabellenpositionen(t);
                 if(test != null) {
@@ -103,17 +110,14 @@ public class TabellenBean implements Serializable {
         }
     }
 
-    public void init(){
-        this.ligen = new ArrayList<>();
-        List <Tabelle> ligas = tabServ.getAlle();
-        for(int i = 0; i< ligas.size(); i++){
-            this.ligen.add(ligas.get(i).getLigaName());
-        }
-            Tabelle t = findTabelleByLigaName(this.ligaNameAnzeigen);
-            if(this.ligaNameAnzeigen != null){
+    public void init() {
+        this.ligen = tabServ.getAlle();
+        if (this.selectedLiga != null) {
+            Tabelle t = findTabelleByLigaName(this.selectedLiga.getLigaName());
+            if (this.selectedLiga != null) {
                 this.tabellenpositionen = sortTabelle(getAllTabellenpositionen(t));
             }
-
+        }
     }
 
 }

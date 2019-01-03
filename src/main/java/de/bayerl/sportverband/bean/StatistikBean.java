@@ -1,6 +1,8 @@
 package de.bayerl.sportverband.bean;
 
 import javax.enterprise.context.RequestScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
@@ -115,6 +117,9 @@ public class StatistikBean implements Serializable {
             if(this.statistik.getPunkteProSpiel() != null){
                 this.punkteProSpielRounded = String.format("%.2f", this.statistik.getPunkteProSpiel());
             }
+        }else {
+            FacesContext.getCurrentInstance().addMessage("statistikForm", new FacesMessage(
+                    "Es wird ein Mannschaftsname und die Anzahl der Fans benötigt."));
         }
     }
 

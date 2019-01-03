@@ -1,5 +1,6 @@
 package de.bayerl.sportverband.bean;
 
+import de.bayerl.sportverband.converter.TabellenConverter;
 import de.bayerl.sportverband.entity.Mannschaft;
 import de.bayerl.sportverband.entity.Spiel;
 import de.bayerl.sportverband.entity.Tabelle;
@@ -9,15 +10,16 @@ import de.bayerl.sportverband.service.TabellenService;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.util.*;
 
 @Named
-@ApplicationScoped
+@SessionScoped
 public class SpielBean implements Serializable {
     @Inject
     SpielplanService spServ;
@@ -27,6 +29,11 @@ public class SpielBean implements Serializable {
 
     @Inject
     TabellenService tabServ;
+
+    @Inject
+    @Getter
+    @Setter
+    TabellenConverter tabConv;
 
     @Getter
     @Setter
@@ -62,91 +69,113 @@ public class SpielBean implements Serializable {
 
     @Getter
     @Setter
-    private String ligaName;
+    private List <Tabelle> ligen;
 
     @Getter
     @Setter
-    private List <String> ligen;
+    private Tabelle selectedLigaAnzeigen;
 
     @Getter
     @Setter
-    private String ligaNameAnzeigen;
+    private Tabelle selectedLiga;
 
     @Getter
     @Setter
-    private List <String> ligenAnzeigen;
+    private List <Tabelle> ligenAnzeigen;
 
     @Getter
     @Setter
     private List<Spiel> spiele;
 
-    public List<Spiel> createHR(){
-        if (spServ.getSpieleByLigaName(this.ligaName).size()== 0){
+    public List<Spiel> hrAnlegen(){
+        if (spServ.getSpieleByLigaName(this.selectedLiga.getLigaName()).size()== 0){
             if(ligen.size()> 0) {
-             this.ligaNameAnzeigen = this.ligaName;
+             this.selectedLigaAnzeigen = this.selectedLiga;
              try {
-                 return spServ.createHR(this.ligaName);
+                 return spServ.hrAnlegen(this.selectedLiga.getLigaName());
              } catch (Exception e){
-                 System.out.println("Could not create Spiele");
+                 FacesContext.getCurrentInstance().addMessage("spielPlanForm:hrAnlegen", new FacesMessage(
+                         "Es konnten keine Spiele erstellt werden, stellen Sie sicher, dass bereits Mannschaften " +
+                                 "erstellt wurden."));
                  return null;
              }
            } else {
-              return null;
-          }
+                FacesContext.getCurrentInstance().addMessage("spielPlanForm:hrAnlegen", new FacesMessage(
+                        "Bitte zuerste eine Liga erstellen."));
+            }
+            return null;
         } else {
+            FacesContext.getCurrentInstance().addMessage("spielPlanForm:hrAnlegen", new FacesMessage(
+                    "Es wurden bereits Spiele für diese Liga erstellt."));
             return null;
         }
     }
 
-    public List<Spiel> createHRRR(){
-        if (spServ.getSpieleByLigaName(this.ligaName).size()== 0) {
+    public List<Spiel> hrRrAnlegen(){
+        if (spServ.getSpieleByLigaName(this.selectedLiga.getLigaName()).size()== 0) {
             if (ligen.size() > 0) {
-                this.ligaNameAnzeigen = this.ligaName;
+                this.selectedLigaAnzeigen = this.selectedLiga;
                 try {
-                    return spServ.createHRRR(this.ligaName);
+                    return spServ.hrRrAnlegen(this.selectedLiga.getLigaName());
                 } catch(Exception e){
-                    System.out.println("Could not create Spiele");
+                    FacesContext.getCurrentInstance().addMessage("spielPlanForm:hrRrAnlegen", new FacesMessage(
+                            "Es konnten keine Spiele erstellt werden, stellen Sie sicher, dass bereits Mannschaften " +
+                                    "erstellt wurden."));
                     return null;
                 }
             } else {
+                FacesContext.getCurrentInstance().addMessage("spielPlanForm:hrRrAnlegen", new FacesMessage(
+                        "Bitte zuerste eine Liga erstellen."));
                 return null;
             }
         } else {
+            FacesContext.getCurrentInstance().addMessage("spielPlanForm:hrRrAnlegen", new FacesMessage(
+                    "Es wurden bereits Spiele für diese Liga erstellt."));
             return null;
         }
     }
 
     public Spiel tragePunkteEin (Spiel m){
-        if(m.getStadionId()!= null){
-            if(this.trefferHeimEnde>= this.trefferHeimErsteHalbzeit && this.trefferGastEnde>=this.trefferGastErsteHalbzeit) {
-                Spiel s = spServ.tragePunkteEin(m.getId(), this.trefferHeimErsteHalbzeit,
-                        this.trefferHeimEnde,
-                        this.trefferGastErsteHalbzeit, this.trefferGastEnde, true);
-                this.mannschaftHeim = s.getMannschaftHeim();
-                this.mannschaftGast = s.getMannschaftGast();
-                tabPosServ.trageDatenInTabellenpositionEin(this.mannschaftHeim);
-                tabPosServ.trageDatenInTabellenpositionEin(this.mannschaftGast);
-                this.spiele = spServ.getSpieleByLigaName(this.ligaNameAnzeigen);
-                this.trefferGastEnde = null;
-                this.trefferGastErsteHalbzeit = null;
-                this.trefferHeimEnde = null;
-                this.trefferHeimErsteHalbzeit = null;
-                return s;
+        if(m.getStadionId()!= null) {
+            if(this.trefferHeimErsteHalbzeit!=null && this.trefferGastErsteHalbzeit!=null && this.trefferHeimEnde!=null && this.trefferGastEnde!=null){
+                if (this.trefferHeimEnde >= this.trefferHeimErsteHalbzeit && this.trefferGastEnde >= this.trefferGastErsteHalbzeit) {
+                    Spiel s = spServ.tragePunkteEin(m.getId(), this.trefferHeimErsteHalbzeit,
+                            this.trefferHeimEnde,
+                            this.trefferGastErsteHalbzeit, this.trefferGastEnde, true);
+                    this.mannschaftHeim = s.getMannschaftHeim();
+                    this.mannschaftGast = s.getMannschaftGast();
+                    tabPosServ.trageDatenInTabellenpositionEin(this.mannschaftHeim);
+                    tabPosServ.trageDatenInTabellenpositionEin(this.mannschaftGast);
+                    this.spiele = spServ.getSpieleByLigaName(this.selectedLigaAnzeigen.getLigaName());
+                    this.trefferGastEnde = null;
+                    this.trefferGastErsteHalbzeit = null;
+                    this.trefferHeimEnde = null;
+                    this.trefferHeimErsteHalbzeit = null;
+                    return s;
+                } else {
+                    FacesContext.getCurrentInstance().addMessage("tragePunkteEinForm", new FacesMessage(
+                            "Der Endstand muss mindestens dem Halbzeitstand entsprechen."));
+                    this.trefferGastEnde = null;
+                    this.trefferGastErsteHalbzeit = null;
+                    this.trefferHeimEnde = null;
+                    this.trefferHeimErsteHalbzeit = null;
+                    return null;
+                }
             } else {
-                this.trefferGastEnde = null;
-                this.trefferGastErsteHalbzeit = null;
-                this.trefferHeimEnde = null;
-                this.trefferHeimErsteHalbzeit = null;
+                FacesContext.getCurrentInstance().addMessage("tragePunkteEinForm", new FacesMessage(
+                        "Bitte vollständiges Ergebniss inklusive Halbzeitstand eintragen."));
                 return null;
             }
         } else {
+            FacesContext.getCurrentInstance().addMessage("tragePunkteEinForm", new FacesMessage(
+                    "Es muss zuerst ein Stadion für dieses Spiel gebucht werden."));
             return null;
         }
     }
 
     public List <Spiel> spieleAnzeigen(){
         this.spiele = null;
-        this.spiele = spServ.getSpieleByLigaName(this.ligaNameAnzeigen);
+        this.spiele = spServ.getSpieleByLigaName(this.selectedLigaAnzeigen.getLigaName());
         return this.spiele;
     }
 
@@ -173,21 +202,19 @@ public class SpielBean implements Serializable {
         }
         if(checker){
         Spiel s = spServ.trageStadionEin(m.getId(), this.datum, this.stadionId);
-        this.spiele = spServ.getSpieleByLigaName(this.ligaNameAnzeigen);
+        this.spiele = spServ.getSpieleByLigaName(this.selectedLigaAnzeigen.getLigaName());
         this.datum = null;
         return s;
         } else {
+            FacesContext.getCurrentInstance().addMessage("bucheStadion", new FacesMessage(
+                    "Stadion kann nicht gebucht werden, da sich der Termin mit einem anderem Spiel dieser " +
+                            "Mannschaften überschneidet."));
             return null;
         }
     }
 
     public void init(){
-        this.ligen = new ArrayList<>();
-        this.ligenAnzeigen = new ArrayList<>();
-        List <Tabelle> ligas = tabServ.getAlle();
-        for(int i = 0; i< ligas.size(); i++){
-            this.ligen.add(ligas.get(i).getLigaName());
-            this.ligenAnzeigen.add(ligas.get(i).getLigaName());
-        }
+        this.ligen = tabServ.getAlle();
+        this.ligenAnzeigen = tabServ.getAlle();
     }
 }

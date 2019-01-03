@@ -19,19 +19,14 @@ public class Tabelle extends BasisEntity implements Serializable {
 
     @Getter
     @Setter
-    private Date saison;
-
-    @Getter
-    @Setter
     @OneToMany(mappedBy = "tabelle", cascade = CascadeType.ALL, orphanRemoval = true)
     private List <Tabellenposition> tabellenPositionen;
 
     public Tabelle() {
     }
 
-    public Tabelle(String ligaName, Date saison){
+    public Tabelle(String ligaName){
         this.ligaName = ligaName;
-        this.saison = saison;
     }
 
     public Tabellenposition addTabellenPosition(Tabellenposition tabPos){

@@ -4,6 +4,8 @@ package de.bayerl.sportverband.service;
 import de.bayerl.sportverband.entity.Mannschaft;
 import de.bayerl.sportverband.entity.Spiel;
 import de.bayerl.sportverband.repository.SpielplanRepository;
+import org.apache.logging.log4j.Logger;
+import utils.qualifiers.OptionSpielplan;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -19,8 +21,12 @@ public class SpielplanService {
     @Inject
     private SpielplanRepository spRep;
 
+    @Inject
+    @OptionSpielplan
+    private Logger logger;
+
     @Transactional
-    public List <Spiel> createHRRR(String ligaName){
+    public List <Spiel> hrRrAnlegen(String ligaName){
         List <Mannschaft> m = mannschaftsService.getMannschaftenByLigaName(ligaName);
         if (m.size()>0) {
             for (int i = 0; i < m.size(); i++) {
@@ -31,6 +37,7 @@ public class SpielplanService {
                     }
                 }
             }
+            logger.info("Spielplan(Hin- und Rückrunde) erfolgreich erstellt.");
             return spRep.findByLigaName(ligaName);
         } else {
             return null;
@@ -38,7 +45,7 @@ public class SpielplanService {
     }
 
     @Transactional
-    public List<Spiel> createHR(String ligaName){
+    public List<Spiel> hrAnlegen(String ligaName){
         List <Mannschaft> m = mannschaftsService.getMannschaftenByLigaName(ligaName);
         if(m.size()>0) {
             for (int i = 0; i < m.size(); i++) {
@@ -49,6 +56,7 @@ public class SpielplanService {
                     }
                 }
             }
+            logger.info("Spielplan(Hinrunde) erfolgreich erstellt.");
             return spRep.findByLigaName(ligaName);
         } else {
             return null;
@@ -60,6 +68,7 @@ public class SpielplanService {
     public Spiel tragePunkteEin (Long spielId, int heimH, int heimE, int gastH, int gastE, Boolean gespielt){
         Spiel s = spRep.findById(spielId);
         s.punkteEintragen(heimH, heimE, gastH, gastE,gespielt);
+        logger.info("Ergebnis eingetragen für Spiel: " + s.getId());
         return spRep.merge(s);
     }
 

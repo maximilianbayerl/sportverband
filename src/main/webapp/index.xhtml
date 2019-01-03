@@ -11,16 +11,22 @@
         <ui:define name="pageContent">
             <div class="container">
                 <div class="col-md-6 col-md-offset-3">
-                    <h:form rendered="#{!loginBean.isAdmindLoggedIn()}">
+
+                    <br></br>
+                    <h:messages globalOnly="false" style="background-color:#ffe665; color:#848285; margin-bottom:5px; list-style:none; height:4em;" class="form-control"></h:messages>
+                    <br></br>
+
+                    <h:form id="loginForm" rendered="#{!loginBean.isAdmindLoggedIn()}">
                         <div class="form-group">
-                            <label>E-Mail</label>
-                            <h:inputText class="form-control" value="#{loginBean.email}"/>
+                            <label>Benutzername:</label>
+                            <h:inputText class="form-control" value="#{loginBean.username}"/>
                         </div>
                         <div class="form-group">
-                            <label>Password</label>
+                            <label>Passwort:</label>
                             <h:inputSecret class="form-control" value="#{loginBean.password}"/>
                         </div>
-                        <h:commandButton id="loginVal" class="btn btn-success btn-lg btn-block"
+                        <br></br>
+                        <h:commandButton id="login" class="btn btn-primary btn-lg btn-block"
                                          action="#{loginBean.validateCredentials}" type="submit" value="Login"/>
 
                     </h:form>
