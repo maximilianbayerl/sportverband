@@ -12,6 +12,7 @@ import java.util.List;
 
 @RequestScoped
 public class MannschaftsService {
+
     @Inject
     @OptionMannschaft
     private Logger logger;

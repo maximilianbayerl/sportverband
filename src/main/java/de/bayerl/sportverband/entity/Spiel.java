@@ -87,10 +87,4 @@ public class Spiel extends BasisEntity implements Serializable {
     public String getMannschaftGastName(){
         return mannschaftGast.getMannschaftsName();
     }
-
-    public Integer getTrefferHeimEnde(){return trefferHeimEnde;}
-
-    public Integer getTrefferGastEnde(){return trefferGastEnde;}
-
-
 }

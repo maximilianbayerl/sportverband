@@ -9,18 +9,18 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 /*
-adapted from: JAVA EE 7 Enterprise-Anwendungsentwicklung leicht gemacht
+übernommen von: JAVA EE 7 Enterprise-Anwendungsentwicklung leicht gemacht
 */
 
 public abstract class SingleIdEntityRepository<E extends BasisEntity> implements Serializable {
     @PersistenceContext(unitName = "sportverbandPU")
     private EntityManager entityManager;
 
-    private final Class<BasisEntity> clasz;
+    private final Class<BasisEntity> classBasis;
 
     protected SingleIdEntityRepository(){
         final ParameterizedType genericSuperClass = (ParameterizedType) getClass().getSuperclass().getGenericSuperclass();
-        clasz = (Class<BasisEntity>) genericSuperClass.getActualTypeArguments()[0];
+        classBasis = (Class<BasisEntity>) genericSuperClass.getActualTypeArguments()[0];
     }
 
     protected EntityManager getEntityManager(){
@@ -36,14 +36,14 @@ public abstract class SingleIdEntityRepository<E extends BasisEntity> implements
         return this.entityManager.merge(entity);
     }
     public E findById(Long id){
-        return (E) entityManager.find(clasz,id);
+        return (E) entityManager.find(classBasis,id);
     }
     public void remove(Long id){
         final E entity = findById(id);
         entityManager.remove(entity);
     }
     public List<E> findAll() {
-        final String statement = "SELECT e FROM " + clasz.getSimpleName() + " e";
+        final String statement = "SELECT e FROM " + classBasis.getSimpleName() + " e";
         final Query query = entityManager.createQuery(statement);
         return query.getResultList();
     }
