@@ -92,7 +92,15 @@ public class SpielBean implements Serializable {
             if(ligen.size()> 0) {
              this.selectedLigaAnzeigen = this.selectedLiga;
              try {
-                 return spServ.hrAnlegen(this.selectedLiga.getLigaName());
+                 List <Spiel> spielplan = spServ.hrAnlegen(this.selectedLiga.getLigaName());
+                 if(spielplan.size() > 0){
+                     return spielplan;
+                 } else {
+                     FacesContext.getCurrentInstance().addMessage("spielPlanForm:hrAnlegen", new FacesMessage(
+                             "Um eine Hinrunde zu erstellen sind mindestens zwei Mannschaften nötig, " +
+                                     "stellen Sie " +
+                                     "sicher, dass bereits mindestens zwei Mannschaften erstellt wurden."));
+                 }
              } catch (Exception e){
                  FacesContext.getCurrentInstance().addMessage("spielPlanForm:hrAnlegen", new FacesMessage(
                          "Es konnten keine Spiele erstellt werden, stellen Sie sicher, dass bereits Mannschaften " +
@@ -116,7 +124,16 @@ public class SpielBean implements Serializable {
             if (ligen.size() > 0) {
                 this.selectedLigaAnzeigen = this.selectedLiga;
                 try {
-                    return spServ.hrRrAnlegen(this.selectedLiga.getLigaName());
+                    List <Spiel> spielplan = spServ.hrRrAnlegen(this.selectedLiga.getLigaName());
+                    if(spielplan.size()> 0){
+                        return spielplan;
+                    } else {
+                        FacesContext.getCurrentInstance().addMessage("spielPlanForm:hrRrAnlegen", new FacesMessage(
+                                "Um eine Hin- und Rückrunde zu erstellen sind mindestens zwei Mannschaften nötig, " +
+                                        "stellen Sie " +
+                                        "sicher, dass bereits mindestens zwei Mannschaften erstellt wurden."));
+                        return null;
+                    }
                 } catch(Exception e){
                     FacesContext.getCurrentInstance().addMessage("spielPlanForm:hrRrAnlegen", new FacesMessage(
                             "Es konnten keine Spiele erstellt werden, stellen Sie sicher, dass bereits Mannschaften " +
