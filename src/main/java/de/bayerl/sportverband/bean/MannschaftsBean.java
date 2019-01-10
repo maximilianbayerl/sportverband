@@ -81,7 +81,7 @@ public class MannschaftsBean implements Serializable {
             this.ownTabellenPosition = m.getTabellenPosition();
             List <Spiel> spiele = spServ.getSpieleByLigaName(this.selectedLiga.getLigaName());
             if(spiele.size() == 0) {
-                if(this.anzahlMitgliederFanClub>=100 && this.anzahlMitgliederFanClub <= 1000000){
+                if(this.anzahlMitgliederFanClub>=100 && this.anzahlMitgliederFanClub <= 5000){
                     tabServ.addTabellenpositionenToTabelle(this.ownTabellenPosition, this.selectedLiga.getLigaName());
                     return m;
                 }else {
@@ -103,14 +103,20 @@ public class MannschaftsBean implements Serializable {
             return null;
         }
     }
+    public String zeigeStatistik(Long m){
+        this.mannschaftStat = m;
+        return "statistik.xhtml?faces-redirect=true";
+    }
+
+    public void deleteAll(){
+        manServ.deleteAll();
+    }
+
     public void init(){
         this.mannschaftStat = null;
         getMannschaften();
         this.ligen = tabServ.getAlle();
     }
 
-    public String zeigeStatistik(Long m){
-        this.mannschaftStat = m;
-        return "statistik.xhtml?faces-redirect=true";
-    }
+
 }

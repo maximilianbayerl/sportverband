@@ -159,42 +159,47 @@
                                             <f:convertDateTime pattern="yyyy-MM-dd HH:mm"/>
                                         </h:inputText>
                                     </div>
-                                <h:commandButton  value="Stadion buchen" class="btn btn-primary btn-lg btn-block" action="#{spielBean.bucheStadion(spiel)}"/>
+                                <h:commandButton  value="Stadion buchen" class="btn btn-primary btn-sm btn-block" action="#{spielBean.bucheStadion(spiel)}"/>
                             </h:form>
                             </h:column>
-                            <h:column rendered="#{loginBean.isAdmindLoggedIn()}">
+                            <h:column class= "col-md-10" rendered="#{loginBean.isAdmindLoggedIn()}">
                                 <f:facet name="header">
                                     Tore:
                                 </f:facet>
                                 <h:form class="tragePunkteEinForm">
-                                    <div class="form-group">
+                                    <div class="col-md-4 col-md-offset-1 form-group">
                                         <label>Heim HZ:</label>
                                         <h:inputText id="HeimHallbzeitstand" class="form-control"
                                                      value="#{spielBean.trefferHeimErsteHalbzeit}"
                                         converterMessage="Bitte nur Zahlen für den Halbzeitstand der Heim Mannschaft eingeben."/>
                                     </div>
-                                    <div class="form-group">
-                                        <label>Gast HZ:</label>
+                                    <div class="col-md-4 col-md-offset-1 form-group">
+
+                                    <label>Gast HZ:</label>
                                         <h:inputText id="GastHallbzeitstand" class="form-control"
                                                      value="#{spielBean.trefferGastErsteHalbzeit}"
                                                      converterMessage="Bitte nur Zahlen für den Halbzeitstand der
                                         Gast Mannschaft eingeben."/>
                                     </div>
-                                    <div class="form-group">
-                                        <label>Heim Endstand:</label>
+                                    <div class="col-md-4 col-md-offset-1 form-group">
+
+                                    <label>Heim Ende:</label>
                                         <h:inputText id="HeimEnstand" class="form-control"
                                                      value="#{spielBean.trefferHeimEnde}"
                                                      converterMessage="Bitte nur Zahlen für den Endstand der Heim Mannschaft eingeben."/>
                                     </div>
-                                    <div class="form-group">
-                                        <label>Gast Endstand:</label>
+                                    <div class="col-md-4 col-md-offset-1 form-group">
+
+                                    <label>Gast Ende:</label>
                                         <h:inputText id="GastEndstand" class="form-control"
                                                      value="#{spielBean.trefferGastEnde}"
                                                      converterMessage="Bitte nur Zahlen für den Endstand der Heim Mannschaft eingeben."/>
                                     </div>
+                                    <div class="col-md-7 col-md-offset-2 form-group">
                                     <h:commandButton  value="OK"
                                                       class="btn btn-primary btn-sm btn-block"
                                                       action="#{spielBean.tragePunkteEin(spiel)}"/>
+                                    </div>
                                 </h:form>
                             </h:column>
                         </h:dataTable>

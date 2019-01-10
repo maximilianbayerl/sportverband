@@ -58,4 +58,9 @@ public class MannschaftsService {
     @Transactional
     public List<Mannschaft> getMannschaften() {return manRep.findAll();}
 
+    @Transactional
+    public void deleteAll(){
+        manRep.removeAll();
+    }
+
 }

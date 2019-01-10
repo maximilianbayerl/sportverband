@@ -79,8 +79,8 @@ public class StatistikService {
                             anzahlTore = anzahlTore + spieleSortiert.get(i).getTrefferHeimEnde();
                             anzahlToreProSpiel = spieleSortiert.get(i).getTrefferHeimEnde();
                             anzahlGegenToreProSpiel = spieleSortiert.get(i).getTrefferGastEnde();
-                            if(init){
-                                besteTordifferenzProSpiel = anzahlToreProSpiel- anzahlGegenToreProSpiel;
+                            if(besteTordifferenzProSpiel < 0) {
+                                besteTordifferenzProSpiel = anzahlToreProSpiel - anzahlGegenToreProSpiel;
                                 init = false;
                             }
                         } else {
@@ -114,8 +114,8 @@ public class StatistikService {
                             anzahlTore = anzahlTore + spieleSortiert.get(i).getTrefferGastEnde();
                             anzahlToreProSpiel = spieleSortiert.get(i).getTrefferGastEnde();
                             anzahlGegenToreProSpiel = spieleSortiert.get(i).getTrefferHeimEnde();
-                            if(init){
-                                besteTordifferenzProSpiel = anzahlToreProSpiel- anzahlGegenToreProSpiel;
+                            if(besteTordifferenzProSpiel< 0) {
+                                besteTordifferenzProSpiel = anzahlToreProSpiel - anzahlGegenToreProSpiel;
                                 init = false;
                             }
                         } else {

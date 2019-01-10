@@ -106,7 +106,7 @@ public class StatistikBean implements Serializable {
     public void changeMannschaft(){
         this.mannschafter = manBean.getMannschaftStat();
         this.mannschaftNeu = manServ.getMannschaftById(this.mannschafter);
-        if(this.anzahlFans >= 100 && this.anzahlFans <= 1000000 && this.mannschaftsName != null){
+        if(this.anzahlFans >= 100 && this.anzahlFans <= 5000 && this.mannschaftsName != null){
             this.mannschaftNeu.setAnzahlMitgliederFanClub(this.anzahlFans);
             this.mannschaftNeu.setMannschaftsName(this.mannschaftsName);
             manServ.changeMannschaft(this.mannschaftNeu);
