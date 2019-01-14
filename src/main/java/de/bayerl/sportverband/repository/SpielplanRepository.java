@@ -38,4 +38,5 @@ public class SpielplanRepository extends SingleIdEntityRepository<Spiel> {
             return spiele;
         }
     }
+
 }

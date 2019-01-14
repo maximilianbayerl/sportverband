@@ -32,11 +32,4 @@ public class MannschaftsRepository extends SingleIdEntityRepository<Mannschaft> 
             return mannschaften;
         }
     }
-    public void removeAll(){
-        Query q = this.getEntityManager().createQuery("Select m FROM Mannschaft as m ");
-        List<Mannschaft> mannschaften = q.getResultList();
-        for(int i = 0; i < mannschaften.size(); i++){
-         remove(mannschaften.get(i).getMannschaftsId());
-        }
-    }
 }

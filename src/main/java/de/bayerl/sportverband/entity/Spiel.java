@@ -4,7 +4,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
+import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -12,10 +14,15 @@ import java.util.Date;
 @Entity
 public class Spiel extends BasisEntity implements Serializable {
 
+    @XmlTransient
     @Getter
     @Setter
     @ManyToOne()
     private Mannschaft mannschaftHeim;
+
+    @Getter
+    @Setter
+    private String mannschaftHeimName;
 
     @Getter
     @Setter
@@ -25,10 +32,15 @@ public class Spiel extends BasisEntity implements Serializable {
     @Setter
     private Integer trefferHeimEnde;
 
+    @XmlTransient
     @Getter
     @Setter
     @ManyToOne()
     private Mannschaft mannschaftGast;
+
+    @Getter
+    @Setter
+    private String mannschaftGastName;
 
     @Getter
     @Setter
@@ -52,7 +64,7 @@ public class Spiel extends BasisEntity implements Serializable {
 
     @Getter
     @Setter
-    private Long stadionId;
+    private String stadionName;
 
     public Spiel () {
 
@@ -63,6 +75,8 @@ public class Spiel extends BasisEntity implements Serializable {
         this.mannschaftHeim = mannschaftHeim;
         this.ligaName = ligaName;
         this.absolviert = false;
+        this.mannschaftGastName = mannschaftGast.getMannschaftsName();
+        this.mannschaftHeimName = mannschaftHeim.getMannschaftsName();
     }
 
     public void punkteEintragen(Integer trefferHeimErsteHalbzeit,
@@ -75,8 +89,8 @@ public class Spiel extends BasisEntity implements Serializable {
         this.absolviert = absolviert;
     }
 
-    public void bucheStadionFake(Long stadionId, Date datum){
-        this.stadionId = stadionId;
+    public void bucheStadionFake(String stadionName, Date datum){
+        this.stadionName = stadionName;
         this.datum = datum;
     }
 

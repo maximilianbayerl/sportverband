@@ -81,12 +81,12 @@ public class MannschaftsBean implements Serializable {
             this.ownTabellenPosition = m.getTabellenPosition();
             List <Spiel> spiele = spServ.getSpieleByLigaName(this.selectedLiga.getLigaName());
             if(spiele.size() == 0) {
-                if(this.anzahlMitgliederFanClub>=100 && this.anzahlMitgliederFanClub <= 5000){
+                if(this.anzahlMitgliederFanClub>=1 && this.anzahlMitgliederFanClub <= 100){
                     tabServ.addTabellenpositionenToTabelle(this.ownTabellenPosition, this.selectedLiga.getLigaName());
                     return m;
                 }else {
                     FacesContext.getCurrentInstance().addMessage("mannschaftForm:createMannschaft", new FacesMessage(
-                            "Bitte geben sie einen Wert im Feld Anzahl der Fans zwischen 100 und 1.000.000 ein."));
+                            "Bitte geben sie einen Wert im Feld Anzahl der Fans zwischen 1 und 100 ein."));
                     manServ.deleteMannschaft(m);
                     return null;
                 }
@@ -106,10 +106,6 @@ public class MannschaftsBean implements Serializable {
     public String zeigeStatistik(Long m){
         this.mannschaftStat = m;
         return "statistik.xhtml?faces-redirect=true";
-    }
-
-    public void deleteAll(){
-        manServ.deleteAll();
     }
 
     public void init(){

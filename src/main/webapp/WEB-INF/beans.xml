@@ -3,6 +3,16 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/beans_1_1.xsd"
        bean-discovery-mode="annotated">
-
+    <alternatives>
+        <class>
+            de.bayerl.sportverband.bean.StadionBean
+        </class>
+    </alternatives>
 
 </beans>
+
+        <!--
+        Use this Bean for Testing if Stadion Service is not available:
+
+        de.bayerl.sportverband.bean.StadionTestBean
+        -->

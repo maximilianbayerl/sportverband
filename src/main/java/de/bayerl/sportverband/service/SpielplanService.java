@@ -6,10 +6,10 @@ import de.bayerl.sportverband.entity.Spiel;
 import de.bayerl.sportverband.repository.SpielplanRepository;
 import org.apache.logging.log4j.Logger;
 import utils.qualifiers.OptionSpielplan;
-
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
+import javax.xml.datatype.XMLGregorianCalendar;
 import java.util.Date;
 import java.util.List;
 
@@ -24,6 +24,7 @@ public class SpielplanService {
     @Inject
     @OptionSpielplan
     private Logger logger;
+
 
     @Transactional
     public List <Spiel> hrRrAnlegen(String ligaName){
@@ -73,19 +74,28 @@ public class SpielplanService {
     }
 
     @Transactional
-    public Spiel trageStadionEin (Long spielId, Date datum, Long stadionId){
+    public Spiel trageStadionEin (Long spielId, Date datum, String stadionName){
         Spiel s = spRep.findById(spielId);
-        s.bucheStadionFake(stadionId, datum);
+        s.bucheStadionFake(stadionName, datum);
         return spRep.merge(s);
     }
 
     @Transactional
-    public List<Spiel> getSpieleByLigaName(String ligaName) {return spRep.findByLigaName(ligaName); }
+    public List<Spiel> getSpieleByLigaName(String ligaName) {
+        List <Spiel> spiele = spRep.findByLigaName(ligaName);
+        if(spiele != null){
+            return 	spiele;
+        } else {
+            return null;
+        }
+    }
 
     @Transactional
     public List<Spiel> getSpieleEinerMannschaft(Mannschaft m){
         return spRep.findByMannschaft(m);
     }
+
+
 
 
 }

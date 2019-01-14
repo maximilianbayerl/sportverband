@@ -106,7 +106,7 @@ public class StatistikBean implements Serializable {
     public void changeMannschaft(){
         this.mannschafter = manBean.getMannschaftStat();
         this.mannschaftNeu = manServ.getMannschaftById(this.mannschafter);
-        if(this.anzahlFans >= 100 && this.anzahlFans <= 5000 && this.mannschaftsName != null){
+        if(this.anzahlFans >= 1 && this.anzahlFans <= 100 && this.mannschaftsName != null){
             this.mannschaftNeu.setAnzahlMitgliederFanClub(this.anzahlFans);
             this.mannschaftNeu.setMannschaftsName(this.mannschaftsName);
             manServ.changeMannschaft(this.mannschaftNeu);
@@ -121,7 +121,7 @@ public class StatistikBean implements Serializable {
                     "Mannschaft erfolgreich geändert."));
         }else {
             FacesContext.getCurrentInstance().addMessage("statistikForm", new FacesMessage(
-                "Es wird ein Mannschaftsname und die Anzahl der Fans zwischen 100 und 1.000.000 benötigt."));
+                "Es wird ein Mannschaftsname und die Anzahl der Fans zwischen 1 und 100 benötigt."));
     }
     }
 

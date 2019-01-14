@@ -64,6 +64,8 @@ public class TabellenBean implements Serializable {
             }
             this.selectedLiga = tabServ.createTabelle(this.ligaName);
             this.ligen = tabServ.getAlle();
+            FacesContext.getCurrentInstance().addMessage("tabellenForm", new FacesMessage(
+                    "Neue Tabelle wurde erfolgreich erstellt."));
             return this.selectedLiga;
         } else {
             FacesContext.getCurrentInstance().addMessage("tabellenForm", new FacesMessage(

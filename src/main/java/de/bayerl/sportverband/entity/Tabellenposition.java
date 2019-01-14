@@ -4,9 +4,11 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
 
 @Entity
+@XmlTransient
 public class Tabellenposition extends BasisEntity implements Serializable {
 
     @Getter

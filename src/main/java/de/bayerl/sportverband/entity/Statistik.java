@@ -5,9 +5,11 @@ import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
+import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
 
 @Entity
+@XmlTransient
 public class Statistik extends BasisEntity implements Serializable {
 
     @Getter
@@ -30,6 +32,7 @@ public class Statistik extends BasisEntity implements Serializable {
     @Setter
     private Double punkteProSpiel;
 
+    @XmlTransient
     @Getter
     @Setter
     @OneToOne(mappedBy = "statistik")

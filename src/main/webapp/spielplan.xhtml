@@ -146,7 +146,9 @@
                                    Stadion:
                                 </f:facet>
                                 Ort:
-                                <h:outputText value="#{spiel.stadionId}"></h:outputText>
+                                <h:outputText value="#{spiel.stadionName}">
+                                    <f:convertDateTime pattern="yyyy-MM-dd HH:mm"/>
+                                </h:outputText>
                                 <br></br>
                                 Zeit:
                                 <h:outputText value="#{spiel.datum}"></h:outputText>
@@ -159,7 +161,8 @@
                                             <f:convertDateTime pattern="yyyy-MM-dd HH:mm"/>
                                         </h:inputText>
                                     </div>
-                                <h:commandButton  value="Stadion buchen" class="btn btn-primary btn-sm btn-block" action="#{spielBean.bucheStadion(spiel)}"/>
+                                <h:commandButton  value="Stadion buchen" class="btn btn-primary btn-sm btn-block"
+                                                  action="#{spielBean.bucheStadion(spiel)}"/>
                             </h:form>
                             </h:column>
                             <h:column class= "col-md-10" rendered="#{loginBean.isAdmindLoggedIn()}">
