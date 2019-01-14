@@ -9,7 +9,6 @@ import utils.qualifiers.OptionSpielplan;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
-import javax.xml.datatype.XMLGregorianCalendar;
 import java.util.Date;
 import java.util.List;
 
@@ -27,7 +26,7 @@ public class SpielplanService {
 
 
     @Transactional
-    public List <Spiel> hrRrAnlegen(String ligaName){
+    public List hrRrAnlegen(String ligaName){
         List <Mannschaft> m = mannschaftsService.getMannschaftenByLigaName(ligaName);
         if (m.size()>0) {
             for (int i = 0; i < m.size(); i++) {
@@ -46,7 +45,7 @@ public class SpielplanService {
     }
 
     @Transactional
-    public List<Spiel> hrAnlegen(String ligaName){
+    public List hrAnlegen(String ligaName){
         List <Mannschaft> m = mannschaftsService.getMannschaftenByLigaName(ligaName);
         if(m.size()>0) {
             for (int i = 0; i < m.size(); i++) {
@@ -76,13 +75,13 @@ public class SpielplanService {
     @Transactional
     public Spiel trageStadionEin (Long spielId, Date datum, String stadionName){
         Spiel s = spRep.findById(spielId);
-        s.bucheStadionFake(stadionName, datum);
+        s.bucheStadion(stadionName, datum);
         return spRep.merge(s);
     }
 
     @Transactional
-    public List<Spiel> getSpieleByLigaName(String ligaName) {
-        List <Spiel> spiele = spRep.findByLigaName(ligaName);
+    public List getSpieleByLigaName(String ligaName) {
+        List spiele = spRep.findByLigaName(ligaName);
         if(spiele != null){
             return 	spiele;
         } else {
@@ -91,7 +90,7 @@ public class SpielplanService {
     }
 
     @Transactional
-    public List<Spiel> getSpieleEinerMannschaft(Mannschaft m){
+    public List getSpieleEinerMannschaft(Mannschaft m){
         return spRep.findByMannschaft(m);
     }
 

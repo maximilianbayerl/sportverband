@@ -31,17 +31,16 @@ public class MannschaftsService {
     }
 
     @Transactional
-    public String deleteMannschaft(Mannschaft mannschaft){
+    public void deleteMannschaft(Mannschaft mannschaft){
        manRep.remove(mannschaft.getId());
        logger.info("Mannschaft erfolgreich gelöscht.");
-        return "Mannschaft erfolgreich gelöscht.";
     }
 
 
     @Transactional
-    public Mannschaft changeMannschaft (Mannschaft mannschaft){
+    public void changeMannschaft (Mannschaft mannschaft){
         logger.info("Mannschaft erfolgreich aktualisiert.");
-        return manRep.merge(mannschaft);
+        manRep.merge(mannschaft);
     }
 
     @Transactional
@@ -50,7 +49,7 @@ public class MannschaftsService {
     }
 
     @Transactional
-    public List<Mannschaft> getMannschaftenByLigaName(String ligaName){
+     List<Mannschaft> getMannschaftenByLigaName(String ligaName){
         return manRep.findByLigaName(ligaName);
     }
 

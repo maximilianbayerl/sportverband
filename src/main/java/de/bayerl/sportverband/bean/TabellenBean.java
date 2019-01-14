@@ -6,7 +6,6 @@ import de.bayerl.sportverband.entity.Tabellenposition;
 import de.bayerl.sportverband.service.Sortbyroll;
 import de.bayerl.sportverband.service.TabellenPositionService;
 import de.bayerl.sportverband.service.TabellenService;
-import javafx.scene.control.Tab;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -55,8 +54,8 @@ public class TabellenBean implements Serializable {
     public Tabelle createTabelle(){
         if(this.ligaName != null) {
             List <Tabelle> tabellen = tabServ.getAlle();
-            for (int i =0; i<tabellen.size(); i++){
-                if(tabellen.get(i).getLigaName().equals(this.ligaName)){
+            for (Tabelle aTabellen : tabellen) {
+                if (aTabellen.getLigaName().equals(this.ligaName)) {
                     FacesContext.getCurrentInstance().addMessage("tabellenForm", new FacesMessage(
                             "Es gibt bereits eine Tabelle mit diesem Namen, bitte Eingabe verändern."));
                     return null;
@@ -74,21 +73,18 @@ public class TabellenBean implements Serializable {
         }
     }
 
-    public List<Tabellenposition> getAllTabellenpositionen(Tabelle t){
+    private List<Tabellenposition> getAllTabellenpositionen(Tabelle t){
         return tabServ.getAllTabellenpositionen(t);
     }
 
-    public Tabelle findTabelleByLigaName(String ligaName){
+    private Tabelle findTabelleByLigaName(String ligaName){
         return tabServ.findTabelleByName(ligaName);
     }
 
-    public ArrayList<Tabellenposition> sortTabelle(List<Tabellenposition> tabelleUnsortiert){
-        ArrayList<Tabellenposition> tabelleSortiert = new ArrayList<>();
+    private ArrayList<Tabellenposition> sortTabelle(List<Tabellenposition> tabelleUnsortiert){
         if(tabelleUnsortiert != null) {
-            for (int i = 0; i < tabelleUnsortiert.size(); i++) {
-                tabelleSortiert.add(tabelleUnsortiert.get(i));
-            }
-            Collections.sort(tabelleSortiert, new Sortbyroll());
+            ArrayList<Tabellenposition> tabelleSortiert = new ArrayList<>(tabelleUnsortiert);
+            tabelleSortiert.sort(new Sortbyroll());
             for (int m = 0; m < tabelleSortiert.size(); m++) {
                 tabelleSortiert.get(m).setPlatz(m + 1);
             }
@@ -97,14 +93,15 @@ public class TabellenBean implements Serializable {
             return null;
         }
     }
+
     public void anzeigenByLigaName(){
         if(this.ligen.size()>0) {
             Tabelle t = findTabelleByLigaName(this.selectedLiga.getLigaName());
             if (t != null) {
                 List <Tabellenposition>test = tabServ.getAllTabellenpositionen(t);
                 if(test != null) {
-                    for (int i = 0; i < test.size(); i++) {
-                        tabPosServ.trageDatenInTabellenpositionEin(test.get(i).getMannschaft());
+                    for (Tabellenposition aTest : test) {
+                        tabPosServ.trageDatenInTabellenpositionEin(aTest.getMannschaft());
                     }
                 }
                 this.tabellenpositionen = sortTabelle(getAllTabellenpositionen(t));

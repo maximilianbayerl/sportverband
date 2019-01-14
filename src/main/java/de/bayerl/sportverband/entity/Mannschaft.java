@@ -24,25 +24,21 @@ public class Mannschaft extends BasisEntity implements Serializable {
     @OneToOne(cascade = CascadeType.ALL)
     @Getter
     @Setter
-    @XmlTransient
     private Statistik statistik;
 
     @OneToOne(cascade = CascadeType.ALL)
     @Getter
     @Setter
-    @XmlTransient
     private Tabellenposition tabellenPosition;
 
     @OneToMany(mappedBy = "mannschaftGast", cascade = CascadeType.REMOVE )
     @Getter
     @Setter
-    @XmlTransient
     private List<Spiel> spielGast;
 
     @OneToMany(mappedBy = "mannschaftHeim", cascade = CascadeType.REMOVE )
     @Getter
     @Setter
-    @XmlTransient
     private  List<Spiel> spielHeim;
 
     public Mannschaft () {
@@ -55,15 +51,12 @@ public class Mannschaft extends BasisEntity implements Serializable {
         this.tabellenPosition = new Tabellenposition();
     }
 
-    public Long getMannschaftsId(){ return this.getId();}
-
-    public Statistik createStatistik(){
+    public void createStatistik(){
         this.statistik = new Statistik();
-        return this.statistik;
     }
 
-    public Tabellenposition createTabellenPosition(){
+    public void createTabellenPosition(){
         this.tabellenPosition = new Tabellenposition(0,0,0,0,0,0,0,0);
-        return this.tabellenPosition;}
+    }
 
 }

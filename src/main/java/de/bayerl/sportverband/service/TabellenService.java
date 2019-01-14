@@ -33,17 +33,16 @@ public class TabellenService {
     }
 
     @Transactional
-    public Tabelle addTabellenpositionenToTabelle(Tabellenposition tabpos, String ligaName){
+    public void addTabellenpositionenToTabelle(Tabellenposition tabpos, String ligaName){
         Tabelle t = tabRep.findByName(ligaName);
         t.addTabellenPosition(tabpos);
         logger.info("Mannschaft zu Tabelle "+ ligaName + " hinzugefügt.");
-        return tabRep.merge(t);
+        tabRep.merge(t);
     }
 
     @Transactional
-    public List<Tabellenposition> getAllTabellenpositionen(Tabelle t){
-       List <Tabellenposition> tabpos = tabPosRep.getTabellenpositionenVonTabelle(t);
-        return tabpos;
+    public List getAllTabellenpositionen(Tabelle t){
+       return tabPosRep.getTabellenpositionenVonTabelle(t);
     }
     @Transactional
     public Tabelle findTabelleByName(String ligaName){
@@ -54,8 +53,5 @@ public class TabellenService {
     public List<Tabelle> getAlle(){
         return tabRep.findAll();
     }
-
-    @Transactional
-    public Tabelle getTabelleById(long id){return tabRep.findById(id);}
 
 }

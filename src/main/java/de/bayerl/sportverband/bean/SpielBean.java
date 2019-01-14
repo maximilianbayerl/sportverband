@@ -202,7 +202,6 @@ public class SpielBean implements Serializable {
 
     public List <Spiel> spieleAnzeigen(){
         if(this.selectedLigaAnzeigen !=null) {
-            this.spiele = null;
             this.spiele = spServ.getSpieleByLigaName(this.selectedLigaAnzeigen.getLigaName());
             if (this.spiele != null) {
                 return this.spiele;

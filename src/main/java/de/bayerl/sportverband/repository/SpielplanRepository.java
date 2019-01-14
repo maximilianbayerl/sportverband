@@ -15,11 +15,11 @@ import java.util.List;
 @Transactional
 public class SpielplanRepository extends SingleIdEntityRepository<Spiel> {
 
-    public List<Spiel> findByMannschaft(Mannschaft m ){
+    public List findByMannschaft(Mannschaft m ){
         Query q = this.getEntityManager().createQuery("Select s FROM Spiel as s WHERE s.mannschaftGast="+
                 ":mannschaft"+ " OR s.mannschaftHeim="+":mannschaft");
         q.setParameter("mannschaft", m);
-        List<Spiel> spiele = q.getResultList();
+        List spiele = q.getResultList();
         if(spiele.isEmpty()){
             return null;
         } else {
@@ -27,11 +27,11 @@ public class SpielplanRepository extends SingleIdEntityRepository<Spiel> {
         }
     }
 
-    public List<Spiel> findByLigaName(String name ){
+    public List findByLigaName(String name ){
         Query q = this.getEntityManager().createQuery("Select s FROM Spiel as s WHERE s.ligaName="+
                 ":ligaName");
         q.setParameter("ligaName", name);
-        List<Spiel> spiele = q.getResultList();
+        List spiele = q.getResultList();
         if(spiele.isEmpty()){
             return Collections.emptyList();
         } else {

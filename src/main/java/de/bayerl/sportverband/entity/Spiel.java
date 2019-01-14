@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
@@ -89,7 +88,7 @@ public class Spiel extends BasisEntity implements Serializable {
         this.absolviert = absolviert;
     }
 
-    public void bucheStadionFake(String stadionName, Date datum){
+    public void bucheStadion(String stadionName, Date datum){
         this.stadionName = stadionName;
         this.datum = datum;
     }

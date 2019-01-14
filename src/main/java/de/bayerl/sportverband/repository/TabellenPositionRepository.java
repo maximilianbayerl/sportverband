@@ -11,12 +11,12 @@ import java.util.List;
 @RequestScoped
 @Transactional
 public class TabellenPositionRepository extends SingleIdEntityRepository <Tabellenposition> {
-    public List<Tabellenposition> getTabellenpositionenVonTabelle(Tabelle t){
+    public List getTabellenpositionenVonTabelle(Tabelle t){
         Query q =
                 this.getEntityManager().createQuery("SELECT p FROM Tabellenposition as p WHERE p.tabelle = " +
                         ":tabelle");
         q.setParameter("tabelle", t);
-        List<Tabellenposition> tabellenpositionen = q.getResultList();
+        List tabellenpositionen = q.getResultList();
         if(tabellenpositionen.isEmpty()){
             return null;
         } else {

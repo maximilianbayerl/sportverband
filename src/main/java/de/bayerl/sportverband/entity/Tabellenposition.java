@@ -61,9 +61,9 @@ public class Tabellenposition extends BasisEntity implements Serializable {
 
     }
 
-    public Tabellenposition(Integer anzahlSiege, Integer anzahlNiederlage,
-                            Integer anzahlUnentschieden, Integer anzahlPunkte, Integer anzahlTore,
-                            Integer  anzahlGegentore, Integer anzahlTorDifferenz, Integer  anzahlAbsolvierteSpiele){
+    Tabellenposition(Integer anzahlSiege, Integer anzahlNiederlage,
+                     Integer anzahlUnentschieden, Integer anzahlPunkte, Integer anzahlTore,
+                     Integer anzahlGegentore, Integer anzahlTorDifferenz, Integer anzahlAbsolvierteSpiele){
         this.anzahlSiege = anzahlSiege;
         this.anzahlUnentschieden = anzahlUnentschieden;
         this.anzahlNiederlage = anzahlNiederlage;
@@ -77,10 +77,10 @@ public class Tabellenposition extends BasisEntity implements Serializable {
         return m.getMannschaftsName();
     }
 
-    public Tabellenposition aktualisiereWerte(Integer anzahlSiege, Integer anzahlNiederlage,
-                                              Integer anzahlUnentschieden, Integer anzahlPunkte, Integer anzahlTore,
-                                              Integer  anzahlGegentore, Integer anzahlTorDifferenz,
-                                              Integer  anzahlAbsolvierteSpiele){
+    public void aktualisiereWerte(Integer anzahlSiege, Integer anzahlNiederlage,
+                                  Integer anzahlUnentschieden, Integer anzahlPunkte, Integer anzahlTore,
+                                  Integer  anzahlGegentore, Integer anzahlTorDifferenz,
+                                  Integer  anzahlAbsolvierteSpiele){
         this.anzahlSiege = anzahlSiege;
         this.anzahlUnentschieden = anzahlUnentschieden;
         this.anzahlNiederlage = anzahlNiederlage;
@@ -89,6 +89,5 @@ public class Tabellenposition extends BasisEntity implements Serializable {
         this.anzahlGegentore = anzahlGegentore;
         this.anzahlTorDifferenz = anzahlTorDifferenz;
         this.anzahlAbsolvierteSpiele = anzahlAbsolvierteSpiele;
-        return this;
     }
 }

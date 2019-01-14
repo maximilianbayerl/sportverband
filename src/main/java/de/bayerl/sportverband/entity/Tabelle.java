@@ -8,7 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import java.io.Serializable;
 import java.util.List;
-import java.util.Date;
 
 @Entity
 public class Tabelle extends BasisEntity implements Serializable {
@@ -29,9 +28,8 @@ public class Tabelle extends BasisEntity implements Serializable {
         this.ligaName = ligaName;
     }
 
-    public Tabellenposition addTabellenPosition(Tabellenposition tabPos){
+    public void addTabellenPosition(Tabellenposition tabPos){
         tabellenPositionen.add(tabPos);
         tabPos.setTabelle(this);
-        return tabPos;
     }
 }

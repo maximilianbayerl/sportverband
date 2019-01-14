@@ -11,7 +11,6 @@ import utils.qualifiers.OptionStatistik;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 
@@ -29,107 +28,105 @@ public class StatistikService {
     private Logger logger;
 
 
-    public void aktualisiereStatistik (Mannschaft m){
+    void aktualisiereStatistik(Mannschaft m){
         boolean init = true;
         int ungeschlagenSeitAnzahlSpiele = 0;
         int besteSiegeSerie = 0;
         int aktuelleSiegeSerie = 0;
         int besteTordifferenzProSpiel = 0;
         int anzahlTore = 0;
-        int anzahlToreProSpiel = 0;
-        int anzahlGegenToreProSpiel = 0;
+        int anzahlToreProSpiel;
+        int anzahlGegenToreProSpiel;
         double schnittToreProSpiel = 0;
         double schnittPunkteProSpiel = 0;
         int anzahlAbsolvierteSpieleGesamt = 0;
         int punkte = 0;
-        List<Spiel> spiele = spRep.findByMannschaft(m);
+        List spiele = spRep.findByMannschaft(m);
         ArrayList<Spiel> spieleSortiert = new ArrayList<>();
         Statistik s = statRep.findByMannschaft(m);
 
         if(spiele != null){
-            for(int i = 0; i<spiele.size(); i++) {
-                spieleSortiert.add(spiele.get(i));
+            for (Object aSpiele : spiele) {
+                spieleSortiert.add((Spiel) aSpiele);
             }
-            Collections.sort(spieleSortiert, new Sortbydate());
-            for(int i = 0; i<spieleSortiert.size(); i++){
-                if(spieleSortiert.get(i).getAbsolviert()) {
+            spieleSortiert.sort(new Sortbydate());
+            for (Spiel aSpieleSortiert : spieleSortiert) {
+                if (aSpieleSortiert.getAbsolviert()) {
                     //heim
-                    if(spieleSortiert.get(i).getMannschaftHeim().getId() == m.getId()){
-                        if(spieleSortiert.get(i).getTrefferHeimEnde()> spieleSortiert.get(i).getTrefferGastEnde()){
+                    if (aSpieleSortiert.getMannschaftHeim().getId().equals(m.getId())) {
+                        if (aSpieleSortiert.getTrefferHeimEnde() > aSpieleSortiert.getTrefferGastEnde()) {
                             //sieg
-                            punkte = punkte +3;
-                            ungeschlagenSeitAnzahlSpiele ++;
-                            aktuelleSiegeSerie ++;
-                            if(aktuelleSiegeSerie>besteSiegeSerie){
+                            punkte = punkte + 3;
+                            ungeschlagenSeitAnzahlSpiele++;
+                            aktuelleSiegeSerie++;
+                            if (aktuelleSiegeSerie > besteSiegeSerie) {
                                 besteSiegeSerie = aktuelleSiegeSerie;
                             }
-                            anzahlTore = anzahlTore + spieleSortiert.get(i).getTrefferHeimEnde();
-                            anzahlToreProSpiel = spieleSortiert.get(i).getTrefferHeimEnde();
-                            anzahlGegenToreProSpiel = spieleSortiert.get(i).getTrefferGastEnde();
-                            if((anzahlToreProSpiel- anzahlGegenToreProSpiel) > besteTordifferenzProSpiel){
+                            anzahlTore = anzahlTore + aSpieleSortiert.getTrefferHeimEnde();
+                            anzahlToreProSpiel = aSpieleSortiert.getTrefferHeimEnde();
+                            anzahlGegenToreProSpiel = aSpieleSortiert.getTrefferGastEnde();
+                            if ((anzahlToreProSpiel - anzahlGegenToreProSpiel) > besteTordifferenzProSpiel) {
                                 besteTordifferenzProSpiel = anzahlToreProSpiel - anzahlGegenToreProSpiel;
                                 init = false;
                             }
-                        } else if(spieleSortiert.get(i).getTrefferHeimEnde()==
-                                spieleSortiert.get(i).getTrefferGastEnde()){
+                        } else if (aSpieleSortiert.getTrefferHeimEnde().equals(aSpieleSortiert.getTrefferGastEnde())) {
                             //unentschieden
-                            punkte ++;
+                            punkte++;
                             aktuelleSiegeSerie = 0;
-                            ungeschlagenSeitAnzahlSpiele ++;
-                            anzahlTore = anzahlTore + spieleSortiert.get(i).getTrefferHeimEnde();
-                            anzahlToreProSpiel = spieleSortiert.get(i).getTrefferHeimEnde();
-                            anzahlGegenToreProSpiel = spieleSortiert.get(i).getTrefferGastEnde();
-                            if(besteTordifferenzProSpiel < 0) {
+                            ungeschlagenSeitAnzahlSpiele++;
+                            anzahlTore = anzahlTore + aSpieleSortiert.getTrefferHeimEnde();
+                            anzahlToreProSpiel = aSpieleSortiert.getTrefferHeimEnde();
+                            anzahlGegenToreProSpiel = aSpieleSortiert.getTrefferGastEnde();
+                            if (besteTordifferenzProSpiel < 0) {
                                 besteTordifferenzProSpiel = anzahlToreProSpiel - anzahlGegenToreProSpiel;
                                 init = false;
                             }
                         } else {
                             //verloren
                             aktuelleSiegeSerie = 0;
-                            anzahlTore = anzahlTore + spieleSortiert.get(i).getTrefferHeimEnde();
-                            anzahlToreProSpiel = spieleSortiert.get(i).getTrefferHeimEnde();
-                            anzahlGegenToreProSpiel = spieleSortiert.get(i).getTrefferGastEnde();
+                            anzahlTore = anzahlTore + aSpieleSortiert.getTrefferHeimEnde();
+                            anzahlToreProSpiel = aSpieleSortiert.getTrefferHeimEnde();
+                            anzahlGegenToreProSpiel = aSpieleSortiert.getTrefferGastEnde();
                             ungeschlagenSeitAnzahlSpiele = 0;
-                            if(init){
-                                besteTordifferenzProSpiel = anzahlToreProSpiel- anzahlGegenToreProSpiel;
+                            if (init) {
+                                besteTordifferenzProSpiel = anzahlToreProSpiel - anzahlGegenToreProSpiel;
                                 init = false;
                             }
                         }
                     } else { // gast
-                        if(spieleSortiert.get(i).getTrefferHeimEnde()> spieleSortiert.get(i).getTrefferGastEnde()){
+                        if (aSpieleSortiert.getTrefferHeimEnde() > aSpieleSortiert.getTrefferGastEnde()) {
                             //verloren
                             ungeschlagenSeitAnzahlSpiele = 0;
-                            anzahlTore = anzahlTore + spieleSortiert.get(i).getTrefferGastEnde();
-                            anzahlToreProSpiel = spieleSortiert.get(i).getTrefferGastEnde();
-                            anzahlGegenToreProSpiel = spieleSortiert.get(i).getTrefferHeimEnde();
-                            if(init){
-                                besteTordifferenzProSpiel = anzahlToreProSpiel- anzahlGegenToreProSpiel;
+                            anzahlTore = anzahlTore + aSpieleSortiert.getTrefferGastEnde();
+                            anzahlToreProSpiel = aSpieleSortiert.getTrefferGastEnde();
+                            anzahlGegenToreProSpiel = aSpieleSortiert.getTrefferHeimEnde();
+                            if (init) {
+                                besteTordifferenzProSpiel = anzahlToreProSpiel - anzahlGegenToreProSpiel;
                                 init = false;
                             }
-                        } else if(spieleSortiert.get(i).getTrefferHeimEnde()==
-                                spieleSortiert.get(i).getTrefferGastEnde()){
+                        } else if (aSpieleSortiert.getTrefferHeimEnde().equals(aSpieleSortiert.getTrefferGastEnde())) {
                             //unentschieden
-                            punkte ++;
-                            ungeschlagenSeitAnzahlSpiele ++;
-                            anzahlTore = anzahlTore + spieleSortiert.get(i).getTrefferGastEnde();
-                            anzahlToreProSpiel = spieleSortiert.get(i).getTrefferGastEnde();
-                            anzahlGegenToreProSpiel = spieleSortiert.get(i).getTrefferHeimEnde();
-                            if(besteTordifferenzProSpiel< 0) {
+                            punkte++;
+                            ungeschlagenSeitAnzahlSpiele++;
+                            anzahlTore = anzahlTore + aSpieleSortiert.getTrefferGastEnde();
+                            anzahlToreProSpiel = aSpieleSortiert.getTrefferGastEnde();
+                            anzahlGegenToreProSpiel = aSpieleSortiert.getTrefferHeimEnde();
+                            if (besteTordifferenzProSpiel < 0) {
                                 besteTordifferenzProSpiel = anzahlToreProSpiel - anzahlGegenToreProSpiel;
                                 init = false;
                             }
                         } else {
                             //sieg
-                            punkte = punkte +3;
-                            ungeschlagenSeitAnzahlSpiele ++;
-                            aktuelleSiegeSerie ++;
-                            anzahlTore = anzahlTore + spieleSortiert.get(i).getTrefferGastEnde();
-                            if(aktuelleSiegeSerie>besteSiegeSerie){
+                            punkte = punkte + 3;
+                            ungeschlagenSeitAnzahlSpiele++;
+                            aktuelleSiegeSerie++;
+                            anzahlTore = anzahlTore + aSpieleSortiert.getTrefferGastEnde();
+                            if (aktuelleSiegeSerie > besteSiegeSerie) {
                                 besteSiegeSerie = aktuelleSiegeSerie;
                             }
-                            anzahlToreProSpiel = spieleSortiert.get(i).getTrefferGastEnde();
-                            anzahlGegenToreProSpiel = spieleSortiert.get(i).getTrefferHeimEnde();
-                            if((anzahlToreProSpiel- anzahlGegenToreProSpiel) > besteTordifferenzProSpiel){
+                            anzahlToreProSpiel = aSpieleSortiert.getTrefferGastEnde();
+                            anzahlGegenToreProSpiel = aSpieleSortiert.getTrefferHeimEnde();
+                            if ((anzahlToreProSpiel - anzahlGegenToreProSpiel) > besteTordifferenzProSpiel) {
                                 besteTordifferenzProSpiel = anzahlToreProSpiel - anzahlGegenToreProSpiel;
                                 init = false;
                             }
@@ -137,8 +134,8 @@ public class StatistikService {
                         }
 
                     }
-                    anzahlAbsolvierteSpieleGesamt ++;
-                    schnittToreProSpiel =(float) anzahlTore / anzahlAbsolvierteSpieleGesamt;
+                    anzahlAbsolvierteSpieleGesamt++;
+                    schnittToreProSpiel = (float) anzahlTore / anzahlAbsolvierteSpieleGesamt;
                     schnittPunkteProSpiel = (float) punkte / anzahlAbsolvierteSpieleGesamt;
                 }
             }

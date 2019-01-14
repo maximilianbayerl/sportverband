@@ -22,7 +22,7 @@ public class StadionTestBean implements AbstrakteBean, Serializable {
     SpielplanService spServ;
 
     @Override
-    public List <Spiel> bucheStadion(Spiel m, Date datum, Tabelle selectedLigaAnzeigen){
+    public void bucheStadion(Spiel m, Date datum, Tabelle selectedLigaAnzeigen){
         Random r = new Random();
         Long stadionId = 100L + r.nextLong();
         List<Spiel> spieleHeim = spServ.getSpieleEinerMannschaft(m.getMannschaftHeim());
@@ -42,12 +42,10 @@ public class StadionTestBean implements AbstrakteBean, Serializable {
         }
         if(checker){
             Spiel s = spServ.trageStadionEin(m.getId(), datum, "FAKE STADION " + stadionId);
-            return spServ.getSpieleByLigaName(selectedLigaAnzeigen.getLigaName());
         } else {
             FacesContext.getCurrentInstance().addMessage("bucheStadion", new FacesMessage(
                     "Stadion kann nicht gebucht werden, da sich der Termin mit einem anderem Spiel dieser " +
                             "Mannschaften überschneidet."));
-            return null;
         }
     }
 }
