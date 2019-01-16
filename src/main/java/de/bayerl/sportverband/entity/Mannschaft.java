@@ -51,6 +51,7 @@ public class Mannschaft extends BasisEntity implements Serializable {
         this.tabellenPosition = new Tabellenposition();
     }
 
+
     public void createStatistik(){
         this.statistik = new Statistik();
     }

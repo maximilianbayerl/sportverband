@@ -34,6 +34,8 @@ public class SpielplanService {
                     if (x != i) {
                         Spiel s = new Spiel(m.get(i), m.get(x), ligaName);
                         spRep.persist(s);
+                        s.setIdSpiel(s.getId());
+                        spRep.merge(s);
                     }
                 }
             }
@@ -53,6 +55,8 @@ public class SpielplanService {
                     if (x != i) {
                         Spiel s = new Spiel(m.get(i), m.get(x), ligaName);
                         spRep.persist(s);
+                        s.setIdSpiel(s.getId());
+                        spRep.merge(s);
                     }
                 }
             }

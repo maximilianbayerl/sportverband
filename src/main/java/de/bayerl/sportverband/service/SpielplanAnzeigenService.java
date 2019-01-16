@@ -32,11 +32,6 @@ public class SpielplanAnzeigenService {
     public List<Spiel> getSpieleByLigaName(String ligaName) {return spRep.findByLigaName(ligaName); }
 
     @Transactional
-    public List<Spiel> getSpieleEinerMannschaft(Mannschaft m){
-        return spRep.findByMannschaft(m);
-    }
-
-    @Transactional
     public Spiel getSpielByID(Long id){
         return spRep.findById(id);
     }

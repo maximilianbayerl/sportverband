@@ -21,7 +21,7 @@ public class Spiel extends BasisEntity implements Serializable {
 
     @Getter
     @Setter
-    private String mannschaftHeimName;
+    private String nameHeim;
 
     @Getter
     @Setter
@@ -39,7 +39,7 @@ public class Spiel extends BasisEntity implements Serializable {
 
     @Getter
     @Setter
-    private String mannschaftGastName;
+    private String nameGast;
 
     @Getter
     @Setter
@@ -65,6 +65,10 @@ public class Spiel extends BasisEntity implements Serializable {
     @Setter
     private String stadionName;
 
+    @Getter
+    @Setter
+    private Long idSpiel;
+
     public Spiel () {
 
     }
@@ -74,8 +78,8 @@ public class Spiel extends BasisEntity implements Serializable {
         this.mannschaftHeim = mannschaftHeim;
         this.ligaName = ligaName;
         this.absolviert = false;
-        this.mannschaftGastName = mannschaftGast.getMannschaftsName();
-        this.mannschaftHeimName = mannschaftHeim.getMannschaftsName();
+        this.nameGast = mannschaftGast.getMannschaftsName();
+        this.nameHeim = mannschaftHeim.getMannschaftsName();
     }
 
     public void punkteEintragen(Integer trefferHeimErsteHalbzeit,
@@ -100,4 +104,6 @@ public class Spiel extends BasisEntity implements Serializable {
     public String getMannschaftGastName(){
         return mannschaftGast.getMannschaftsName();
     }
+
+
 }

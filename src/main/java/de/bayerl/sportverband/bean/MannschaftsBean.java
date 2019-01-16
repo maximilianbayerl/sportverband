@@ -103,6 +103,7 @@ public class MannschaftsBean implements Serializable {
             return null;
         }
     }
+
     public String zeigeStatistik(Long m){
         this.mannschaftStat = m;
         return "statistik.xhtml?faces-redirect=true";
