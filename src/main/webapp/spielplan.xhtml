@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
+<html
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
@@ -13,32 +13,81 @@
             </ui:include>        
         </ui:define>
         <ui:define name="pageContent">
-            <div class="container">
-            <div class="col-md-6 col-md-offset-3">
-                <h:form id="createHR">
-                    <h:commandButton id="createHRButton" class="btn btn-success btn-lg btn-block"
-                                     action="#{spielBean.createHR}" value="CREATE HR"
-                                   />
-                    
-              </h:form>
-                <h:form id="createRR">
-                    <h:commandButton id="createRRButton" class="btn btn-success btn-lg btn-block"
-                                     action="#{spielBean.createHRRR}" value="CREATE HRRR"
-                                     />
+            <div class="container" id="spielPlanForm">
+            <div class="col-md-10 col-md-offset-1">
+                <div class = "row">
+                    <div class="col-md-4 col-md-offset-1">
+                <h:form id="hrAnlegen" rendered="#{loginBean.isAdmindLoggedIn()}">
+                    <div class="form-group">
+                        <label>Tabelle:</label>
+                        <h:selectOneMenu style="margin-left:2em" class="btn btn-primary dropdown-toggle" id="LigaHR"
+                                         value="#{spielBean.selectedLiga}">
+                            <f:converter binding="#{spielBean.tabConv}"/>
 
-                </h:form>
+                            <f:selectItems var="liga" itemLabel="#{liga.ligaName}" value="#{spielBean.ligen}" />
+                        </h:selectOneMenu>
+                    </div>
+                    <h:commandButton id="hrAnlegenButton" class="btn btn-primary btn-lg btn-block"
+                                     action="#{spielBean.hrAnlegen}" value="Hinrunde erstellen"/>
+                    <br></br>
+              </h:form>
+                    </div>
+                    <div class="col-md-4 col-md-offset-2">
+                    <h:form id="hrRrAnlegen" rendered="#{loginBean.isAdmindLoggedIn()}">
+                    <div class="form-group">
+                        <label>Tabelle:</label>
+                        <h:selectOneMenu style="margin-left:2em" class="btn btn-primary dropdown-toggle" id="LigaRR"
+                                         value="#{spielBean.selectedLiga}">
+                            <f:converter binding="#{spielBean.tabConv}"/>
+                        <f:selectItems var="liga" itemLabel="#{liga.ligaName}" value="#{spielBean.ligen}" />
+                        </h:selectOneMenu>
+                    </div>
+                    <h:commandButton id="hrRrAnlegenButton" class="btn btn-primary btn-lg btn-block"
+                                     action="#{spielBean.hrRrAnlegen}" value="Hin- und Rückrunde erstellen"/>
+                        <br></br>
+                        <br></br>
+                        <br></br>
+                    </h:form>
+                </div>
+            </div>
             </div>
         </div>
+            <div class="container">
+                <div class="col-md-6 col-md-offset-3">
+                    <h:form id="anzeigen">
+                        <div class="col-md-6 col-md-offset-3">
+                        <div  class="form-group">
+                            <label>Tabelle:</label>
+                            <h:selectOneMenu style="margin-left:2em" class="btn btn-primary dropdown-toggle"
+                                             id="LigaShow"
+                                             value="#{spielBean.selectedLigaAnzeigen}">
+                                <f:converter binding="#{spielBean.tabConv}"/>
+                                <f:selectItems value="#{spielBean.ligenAnzeigen}" var="liga" itemLabel="#{liga.ligaName}" />
+                            </h:selectOneMenu>
+                        </div>
+                        </div>
+                        <h:commandButton id="anzeigenByLigaName" class="btn btn-primary btn-lg btn-block" action="#{spielBean.spieleAnzeigen}" value="Spiele anzeigen"/>
+                    </h:form>
+                </div>
+            </div>
+            <br></br>
+            <div class="container">
+                <div class="col-md-6 col-md-offset-3">
+                    <h:messages globalOnly="false"
+                                style="background-color:#ffe665; color:#848285; margin-bottom:5px; list-style:none; height:7em;" class="form-control"></h:messages>
+                </div>
+            </div>
+            <br></br>
             <div class="container">
                 <div class="row">
                     <div class="col-md-10 col-md-offset-1">
                         <p><b>Spielplan:</b></p>
                         <h:dataTable value="#{spielBean.spiele}"
                                      class="table table-striped table-bordered dt-responsive nowrap" var="spiel"
-                                     border="1">
+                                     border="1" id="Spielplan">
                             <h:column>
                                 <f:facet name="header">
-                                   ID:
+                                   Id:
                                 </f:facet>
                                 <h:outputText value="#{spiel.id}"/>
                             </h:column>
@@ -53,55 +102,107 @@
                                     Gast:
                                 </f:facet>
                                 <h:outputText value="#{spiel.getMannschaftGastName()}"></h:outputText>
-
                             </h:column>
                             <h:column>
                                 <f:facet name="header">
-                                   TrefferHeimHZ:
+                                   Heim HZ:
                                 </f:facet>
+                                <div   style="float: right">
+                                    (
                                 <h:outputText value="#{spiel.trefferHeimErsteHalbzeit}"></h:outputText>
+                                    <h:outputText rendered="#{spiel.trefferHeimErsteHalbzeit == null}" value="-" />
+                                </div>
+                            </h:column>
+                            <h:column>
+                               :
                             </h:column>
                             <h:column>
                                 <f:facet name="header">
-                                    TrefferGastHZ:
+                                    Gast HZ:
                                 </f:facet>
-                                <h:outputText value="#{spiel.trefferGastErsteHalbzeit}"></h:outputText>
+                                <h:outputText  value="#{spiel.trefferGastErsteHalbzeit}"></h:outputText>
+                                <h:outputText rendered="#{spiel.trefferGastErsteHalbzeit == null}" value="-" />
+                                )
                             </h:column>
-                            <h:column>
+                            <h:column  >
                                 <f:facet name="header">
-                                    TrefferHeimEnde:
+                                   Heim Endstand:
                                 </f:facet>
-                                <h:outputText value="#{spiel.trefferHeimEnde}"></h:outputText>
+                                <h:outputText  style="float: right" value="#{spiel.trefferHeimEnde}"></h:outputText>
+                                <h:outputText style="float: right" rendered="#{spiel.trefferHeimEnde == null}" value="-" />
+                            </h:column>
+                            <h:column>
+                               :
                             </h:column>
                             <h:column>
                                 <f:facet name="header">
-                                    TrefferGastEnde:
+                                    Gast Endstand:
                                 </f:facet>
                                 <h:outputText value="#{spiel.trefferGastEnde}"></h:outputText>
+                                <h:outputText rendered="#{spiel.trefferGastEnde == null}" value="-" />
                             </h:column>
                             <h:column>
-                                <h:form>
+                                <f:facet name="header">
+                                   Stadion:
+                                </f:facet>
+                                Ort:
+                                <h:outputText value="#{spiel.stadionName}">
+                                    <f:convertDateTime pattern="yyyy-MM-dd HH:mm"/>
+                                </h:outputText>
+                                <br></br>
+                                Zeit:
+                                <h:outputText value="#{spiel.datum}"></h:outputText>
+                                <h:form id="bucheStadion" rendered="#{loginBean.isAdmindLoggedIn()}">
                                     <div class="form-group">
-                                        <label>HeimH</label>
-                                        <h:inputText class="form-control"
-                                                     value="#{spielBean.trefferHeimErsteHalbzeit}"/>
+                                        <label>Datum</label>
+                                        <br></br>
+                                        <h:inputText id="Feld_Datum" required="true" value="#{spielBean.datum}"
+                                                     converterMessage="Bitte Datum in der Form YYYY-MM-DD HH:MM eingeben.">
+                                            <f:convertDateTime pattern="yyyy-MM-dd HH:mm"/>
+                                        </h:inputText>
                                     </div>
-                                    <div class="form-group">
-                                        <label>GastH</label>
-                                        <h:inputText class="form-control"
-                                                     value="#{spielBean.trefferGastErsteHalbzeit}"/>
+                                <h:commandButton  value="Stadion buchen" class="btn btn-primary btn-sm btn-block"
+                                                  action="#{spielBean.bucheStadion(spiel)}"/>
+                            </h:form>
+                            </h:column>
+                            <h:column class= "col-md-10" rendered="#{loginBean.isAdmindLoggedIn()}">
+                                <f:facet name="header">
+                                    Tore:
+                                </f:facet>
+                                <h:form class="tragePunkteEinForm">
+                                    <div class="col-md-4 col-md-offset-1 form-group">
+                                        <label>Heim HZ:</label>
+                                        <h:inputText id="HeimHallbzeitstand" class="form-control"
+                                                     value="#{spielBean.trefferHeimErsteHalbzeit}"
+                                        converterMessage="Bitte nur Zahlen für den Halbzeitstand der Heim Mannschaft eingeben."/>
                                     </div>
-                                    <div class="form-group">
-                                        <label>HeimE</label>
-                                        <h:inputText class="form-control" value="#{spielBean.trefferHeimEnde}"/>
+                                    <div class="col-md-4 col-md-offset-1 form-group">
+
+                                    <label>Gast HZ:</label>
+                                        <h:inputText id="GastHallbzeitstand" class="form-control"
+                                                     value="#{spielBean.trefferGastErsteHalbzeit}"
+                                                     converterMessage="Bitte nur Zahlen für den Halbzeitstand der
+                                        Gast Mannschaft eingeben."/>
                                     </div>
-                                    <div class="form-group">
-                                        <label>GastE</label>
-                                        <h:inputText class="form-control" value="#{spielBean.trefferGastEnde}"/>
+                                    <div class="col-md-4 col-md-offset-1 form-group">
+
+                                    <label>Heim Ende:</label>
+                                        <h:inputText id="HeimEnstand" class="form-control"
+                                                     value="#{spielBean.trefferHeimEnde}"
+                                                     converterMessage="Bitte nur Zahlen für den Endstand der Heim Mannschaft eingeben."/>
                                     </div>
-                                    <h:commandButton  value="Punkte eintragen"
-                                                      class="btn btn-success btn-lg btn-block"
+                                    <div class="col-md-4 col-md-offset-1 form-group">
+
+                                    <label>Gast Ende:</label>
+                                        <h:inputText id="GastEndstand" class="form-control"
+                                                     value="#{spielBean.trefferGastEnde}"
+                                                     converterMessage="Bitte nur Zahlen für den Endstand der Heim Mannschaft eingeben."/>
+                                    </div>
+                                    <div class="col-md-7 col-md-offset-2 form-group">
+                                    <h:commandButton  value="OK"
+                                                      class="btn btn-primary btn-sm btn-block"
                                                       action="#{spielBean.tragePunkteEin(spiel)}"/>
+                                    </div>
                                 </h:form>
                             </h:column>
                         </h:dataTable>

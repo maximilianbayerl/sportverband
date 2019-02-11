@@ -6,10 +6,8 @@ import lombok.Setter;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.List;
-import java.util.Date;
 
 @Entity
 public class Tabelle extends BasisEntity implements Serializable {
@@ -20,31 +18,18 @@ public class Tabelle extends BasisEntity implements Serializable {
 
     @Getter
     @Setter
-    private Date saison;
-
-    @Getter
-    @Setter
     @OneToMany(mappedBy = "tabelle", cascade = CascadeType.ALL, orphanRemoval = true)
     private List <Tabellenposition> tabellenPositionen;
 
     public Tabelle() {
-
     }
 
-    public Tabelle(String ligaName, Date saison){
+    public Tabelle(String ligaName){
         this.ligaName = ligaName;
-        this.saison = saison;
     }
 
-    public Tabellenposition addTabellenPosition(Tabellenposition tabPos){
+    public void addTabellenPosition(Tabellenposition tabPos){
         tabellenPositionen.add(tabPos);
         tabPos.setTabelle(this);
-        return tabPos;
     }
-
-    public void setTabellenPosition(List<Tabellenposition> t){
-        this.tabellenPositionen = t;
-    }
-
-
 }

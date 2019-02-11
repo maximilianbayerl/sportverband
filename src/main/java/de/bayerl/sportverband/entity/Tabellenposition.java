@@ -4,10 +4,11 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
-import java.util.List;
 
 @Entity
+@XmlTransient
 public class Tabellenposition extends BasisEntity implements Serializable {
 
     @Getter
@@ -60,15 +61,9 @@ public class Tabellenposition extends BasisEntity implements Serializable {
 
     }
 
-    public Tabellenposition(Tabelle t){
-        List <Tabellenposition> m = t.getTabellenPositionen();
-        m.add(this);
-        t.setTabellenPositionen(m);
-    }
-
-    public Tabellenposition(Integer anzahlSiege, Integer anzahlNiederlage,
-                            Integer anzahlUnentschieden, Integer anzahlPunkte, Integer anzahlTore,
-                            Integer  anzahlGegentore, Integer anzahlTorDifferenz, Integer  anzahlAbsolvierteSpiele){
+    Tabellenposition(Integer anzahlSiege, Integer anzahlNiederlage,
+                     Integer anzahlUnentschieden, Integer anzahlPunkte, Integer anzahlTore,
+                     Integer anzahlGegentore, Integer anzahlTorDifferenz, Integer anzahlAbsolvierteSpiele){
         this.anzahlSiege = anzahlSiege;
         this.anzahlUnentschieden = anzahlUnentschieden;
         this.anzahlNiederlage = anzahlNiederlage;
@@ -77,17 +72,15 @@ public class Tabellenposition extends BasisEntity implements Serializable {
         this.anzahlGegentore = anzahlGegentore;
         this.anzahlTorDifferenz = anzahlTorDifferenz;
         this.anzahlAbsolvierteSpiele = anzahlAbsolvierteSpiele;
-        System.out.println(anzahlSiege);
-        System.out.println("SIEGE");
     }
     public String getMannschaftsName(Mannschaft m){
         return m.getMannschaftsName();
     }
 
-    public Tabellenposition aktualisiereWerte(Integer anzahlSiege, Integer anzahlNiederlage,
-                                              Integer anzahlUnentschieden, Integer anzahlPunkte, Integer anzahlTore,
-                                              Integer  anzahlGegentore, Integer anzahlTorDifferenz,
-                                              Integer  anzahlAbsolvierteSpiele){
+    public void aktualisiereWerte(Integer anzahlSiege, Integer anzahlNiederlage,
+                                  Integer anzahlUnentschieden, Integer anzahlPunkte, Integer anzahlTore,
+                                  Integer  anzahlGegentore, Integer anzahlTorDifferenz,
+                                  Integer  anzahlAbsolvierteSpiele){
         this.anzahlSiege = anzahlSiege;
         this.anzahlUnentschieden = anzahlUnentschieden;
         this.anzahlNiederlage = anzahlNiederlage;
@@ -96,9 +89,5 @@ public class Tabellenposition extends BasisEntity implements Serializable {
         this.anzahlGegentore = anzahlGegentore;
         this.anzahlTorDifferenz = anzahlTorDifferenz;
         this.anzahlAbsolvierteSpiele = anzahlAbsolvierteSpiele;
-        System.out.println(anzahlSiege);
-        System.out.println("SIEGE");
-
-        return this;
     }
 }

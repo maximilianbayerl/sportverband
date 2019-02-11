@@ -4,16 +4,15 @@ package de.bayerl.sportverband.service;
 import de.bayerl.sportverband.entity.Mannschaft;
 import de.bayerl.sportverband.entity.Spiel;
 import de.bayerl.sportverband.repository.SpielplanRepository;
-
+import org.apache.logging.log4j.Logger;
+import utils.qualifiers.OptionSpielplan;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.jws.WebService;
 import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
 
 @RequestScoped
-@WebService
 public class SpielplanService {
     @Inject
     MannschaftsService mannschaftsService;
@@ -21,32 +20,51 @@ public class SpielplanService {
     @Inject
     private SpielplanRepository spRep;
 
+    @Inject
+    @OptionSpielplan
+    private Logger logger;
+
+
     @Transactional
-    public List <Spiel> createHRRR(Date datum, String schiedsrichterName){
-        List <Mannschaft> m = mannschaftsService.getMannschaften();
-        for(int i = 0; i < m.size(); i++){
-            for(int x = 0; x < m.size(); x++){
-                if(x!=i){
-                    Spiel s = new Spiel(m.get(i), m.get(x),datum, schiedsrichterName);
-                    spRep.persist(s);
+    public List hrRrAnlegen(String ligaName){
+        List <Mannschaft> m = mannschaftsService.getMannschaftenByLigaName(ligaName);
+        if (m.size()>0) {
+            for (int i = 0; i < m.size(); i++) {
+                for (int x = 0; x < m.size(); x++) {
+                    if (x != i) {
+                        Spiel s = new Spiel(m.get(i), m.get(x), ligaName);
+                        spRep.persist(s);
+                        s.setIdSpiel(s.getId());
+                        spRep.merge(s);
+                    }
                 }
             }
+            logger.info("Spielplan(Hin- und Rückrunde) erfolgreich erstellt.");
+            return spRep.findByLigaName(ligaName);
+        } else {
+            return null;
         }
-        return spRep.findAll();
     }
 
     @Transactional
-    public List<Spiel> createHR(Date datum, String schiedsrichterName){
-        List <Mannschaft> m = mannschaftsService.getMannschaften();
-        for(int i = 0; i < m.size(); i++){
-            for(int x = i; x < m.size(); x++){
-                if(x!=i){
-                    Spiel s = new Spiel(m.get(i), m.get(x),datum, schiedsrichterName);
-                    spRep.persist(s);
+    public List hrAnlegen(String ligaName){
+        List <Mannschaft> m = mannschaftsService.getMannschaftenByLigaName(ligaName);
+        if(m.size()>0) {
+            for (int i = 0; i < m.size(); i++) {
+                for (int x = i; x < m.size(); x++) {
+                    if (x != i) {
+                        Spiel s = new Spiel(m.get(i), m.get(x), ligaName);
+                        spRep.persist(s);
+                        s.setIdSpiel(s.getId());
+                        spRep.merge(s);
+                    }
                 }
             }
+            logger.info("Spielplan(Hinrunde) erfolgreich erstellt.");
+            return spRep.findByLigaName(ligaName);
+        } else {
+            return null;
         }
-        return spRep.findAll();
     }
 
 
@@ -54,26 +72,35 @@ public class SpielplanService {
     public Spiel tragePunkteEin (Long spielId, int heimH, int heimE, int gastH, int gastE, Boolean gespielt){
         Spiel s = spRep.findById(spielId);
         s.punkteEintragen(heimH, heimE, gastH, gastE,gespielt);
-        System.out.println("Did it");
+        logger.info("Ergebnis eingetragen für Spiel: " + s.getId());
         return spRep.merge(s);
     }
 
-
-
     @Transactional
-    public String deleteSpiel(Spiel spiel){
-        spRep.remove(spiel.getId());
-        return "Spiel successfully deleted";
+    public Spiel trageStadionEin (Long spielId, Date datum, String stadionName){
+        Spiel s = spRep.findById(spielId);
+        s.bucheStadion(stadionName, datum);
+        return spRep.merge(s);
     }
 
     @Transactional
-    public List<Spiel> getSpiele() {return spRep.findAll();}
-
+    public List getSpieleByLigaName(String ligaName) {
+        List spiele = spRep.findByLigaName(ligaName);
+        if(spiele != null){
+            return 	spiele;
+        } else {
+            return null;
+        }
+    }
 
     @Transactional
-    public List<Spiel> getSpieleEinerMannschaft(Mannschaft m){
+    public List getSpieleEinerMannschaft(Mannschaft m){
         return spRep.findByMannschaft(m);
     }
+
+
+
+
 }
 
 

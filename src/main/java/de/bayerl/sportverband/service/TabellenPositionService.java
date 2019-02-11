@@ -5,15 +5,15 @@ import de.bayerl.sportverband.entity.Spiel;
 import de.bayerl.sportverband.entity.Tabellenposition;
 import de.bayerl.sportverband.repository.SpielplanRepository;
 import de.bayerl.sportverband.repository.TabellenPositionRepository;
+import org.apache.logging.log4j.Logger;
+import utils.qualifiers.OptionTabellenposition;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.jws.WebService;
 import javax.transaction.Transactional;
 import java.util.List;
 
 @RequestScoped
-@WebService
 public class TabellenPositionService {
 
     @Inject
@@ -22,16 +22,17 @@ public class TabellenPositionService {
     @Inject
     private TabellenPositionRepository tabPosRep;
 
+    @Inject
+    private StatistikService statServ;
 
-    public Tabellenposition getTabellenPositionOfMannschaft(Mannschaft m){
-       return m.getTabellenPosition();
-    }
+    @Inject
+    @OptionTabellenposition
+    private Logger logger;
 
     @Transactional
-    public Tabellenposition trageDatenInTabellenpositionEin(Mannschaft m){
+    public void trageDatenInTabellenpositionEin(Mannschaft m) {
         List<Spiel> spiele = spRep.findByMannschaft(m);
         Tabellenposition aktuellePosition = m.getTabellenPosition();
-        System.out.println(aktuellePosition);
         int anzahlSiege = 0;
         int anzahlUnentschieden = 0;
         int anzahlNiederlage = 0;
@@ -40,39 +41,49 @@ public class TabellenPositionService {
         int anzahlGegentore = 0;
         int anzahlTorDifferenz = 0;
         int anzahlAbsolvierteSpiele = 0;
+        if (spiele != null) {
+            for (Spiel aSpiele : spiele) {
+                if (aSpiele.getAbsolviert()) {
+                    int anzahlToreProSpiel;
+                    int anzahlGegenToreProSpiel;
+                    if (aSpiele.getMannschaftHeim().getId().equals(m.getId())) {
+                        anzahlTore = anzahlTore + aSpiele.getTrefferHeimEnde();
+                        anzahlToreProSpiel = aSpiele.getTrefferHeimEnde();
+                        anzahlGegentore = anzahlGegentore + aSpiele.getTrefferGastEnde();
+                        anzahlGegenToreProSpiel = aSpiele.getTrefferGastEnde();
+                    } else {
+                        anzahlTore = anzahlTore + aSpiele.getTrefferGastEnde();
+                        anzahlToreProSpiel = aSpiele.getTrefferGastEnde();
+                        anzahlGegentore = anzahlGegentore + aSpiele.getTrefferHeimEnde();
+                        anzahlGegenToreProSpiel = aSpiele.getTrefferHeimEnde();
+                    }
+                    if (anzahlToreProSpiel > anzahlGegenToreProSpiel) {
+                        anzahlSiege++;
+                    } else if (anzahlToreProSpiel == anzahlGegenToreProSpiel) {
+                        anzahlUnentschieden++;
+                    } else if (anzahlGegenToreProSpiel > 0) {
+                        anzahlNiederlage++;
+                    }
+                }
+            }
+            anzahlPunkte = anzahlSiege * 3 + anzahlUnentschieden;
+            anzahlTorDifferenz = anzahlTore - anzahlGegentore;
+            anzahlAbsolvierteSpiele = anzahlSiege + anzahlUnentschieden + anzahlNiederlage;
 
-        for(int i = 0; i<spiele.size(); i++){
-            if(spiele.get(i).getAbsolviert()) {
-                int anzahlToreProSpiel;
-            int anzahlGegenToreProSpiel;
-            if(spiele.get(i).getMannschaftHeim().getId() == m.getId()){
-                anzahlTore = anzahlTore + spiele.get(i).getTrefferHeimEnde();
-                anzahlToreProSpiel = spiele.get(i).getTrefferHeimEnde();
-                anzahlGegentore = anzahlGegentore + spiele.get(i).getTrefferGastEnde();
-                anzahlGegenToreProSpiel = spiele.get(i).getTrefferGastEnde();
-            } else {
-                anzahlTore = anzahlTore + spiele.get(i).getTrefferGastEnde();
-                anzahlToreProSpiel = spiele.get(i).getTrefferGastEnde();
-                anzahlGegentore = anzahlGegentore + spiele.get(i).getTrefferHeimEnde();
-                anzahlGegenToreProSpiel = spiele.get(i).getTrefferHeimEnde();
-            }
-            if(anzahlToreProSpiel > anzahlGegenToreProSpiel){
-                anzahlSiege ++;
-            } else if(anzahlToreProSpiel == anzahlGegenToreProSpiel){
-                anzahlUnentschieden ++;
-            } else if(anzahlToreProSpiel < anzahlGegenToreProSpiel && anzahlGegenToreProSpiel > 0){
-                anzahlNiederlage ++;
-            }
-            }
+            aktuellePosition.aktualisiereWerte(anzahlSiege, anzahlNiederlage, anzahlUnentschieden, anzahlPunkte,
+                    anzahlTore, anzahlGegentore, anzahlTorDifferenz, anzahlAbsolvierteSpiele);
+
+            statServ.aktualisiereStatistik(m);
+            logger.info("Tabellenposition aktualisiert für Mannschaft: " + m.getMannschaftsName());
+            tabPosRep.merge(aktuellePosition);
+        } else {
+            statServ.aktualisiereStatistik(m);
+            aktuellePosition.aktualisiereWerte(anzahlSiege, anzahlNiederlage, anzahlUnentschieden, anzahlPunkte,
+                    anzahlTore, anzahlGegentore, anzahlTorDifferenz, anzahlAbsolvierteSpiele);
+            tabPosRep.merge(aktuellePosition);
+            logger.info("Keine Spiele verfügbar.");
         }
-        anzahlPunkte = anzahlSiege * 3 + anzahlUnentschieden;
-        anzahlTorDifferenz = anzahlTore - anzahlGegentore;
-        anzahlAbsolvierteSpiele = anzahlSiege + anzahlUnentschieden + anzahlNiederlage;
-
-        aktuellePosition.aktualisiereWerte(anzahlSiege, anzahlNiederlage, anzahlUnentschieden, anzahlPunkte,
-                anzahlTore,anzahlGegentore, anzahlTorDifferenz, anzahlAbsolvierteSpiele);
-
-        return tabPosRep.merge(aktuellePosition);
     }
+
 
 }

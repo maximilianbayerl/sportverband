@@ -5,9 +5,11 @@ import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
+import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
 
 @Entity
+@XmlTransient
 public class Statistik extends BasisEntity implements Serializable {
 
     @Getter
@@ -17,14 +19,6 @@ public class Statistik extends BasisEntity implements Serializable {
     @Getter
     @Setter
     private Integer siegesSerie;
-
-    @Getter
-    @Setter
-    private Integer gewonneneSaisons;
-
-    @Getter
-    @Setter
-    private Integer bestePlatzierungEndeSaison;
 
     @Getter
     @Setter
@@ -38,24 +32,17 @@ public class Statistik extends BasisEntity implements Serializable {
     @Setter
     private Double punkteProSpiel;
 
+    @XmlTransient
+    @Getter
+    @Setter
+    @OneToOne(mappedBy = "statistik")
+    private Mannschaft mannschaft;
+
     public Statistik(){
         this.ungeschlagenSeitAnzahlSpiele = 0;
         this.siegesSerie = 0;
-        this.gewonneneSaisons = 0;
-        this.bestePlatzierungEndeSaison = 0;
         this.besteTordifferenz = 0;
         this.toreProSpiel = 0.0;
         this.punkteProSpiel = 0.0;
     }
-    private Statistik(Integer ungeschlagenSeitAnzahlSpiele, Integer siegesSerie, Integer gewonneneSaisons,
-                      Integer bestePlatzierungEndeSaison, Integer besteTordifferenz, Double toreProSpiel, Double punkteProSpiel){
-        this.ungeschlagenSeitAnzahlSpiele = ungeschlagenSeitAnzahlSpiele;
-        this.siegesSerie = siegesSerie;
-        this.gewonneneSaisons = gewonneneSaisons;
-        this.bestePlatzierungEndeSaison = bestePlatzierungEndeSaison;
-        this.besteTordifferenz = besteTordifferenz;
-        this. toreProSpiel = toreProSpiel;
-        this.punkteProSpiel = punkteProSpiel;
-    }
-
 }

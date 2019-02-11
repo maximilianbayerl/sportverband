@@ -4,7 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.Entity;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
+import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -12,10 +13,15 @@ import java.util.Date;
 @Entity
 public class Spiel extends BasisEntity implements Serializable {
 
+    @XmlTransient
     @Getter
     @Setter
-    @OneToOne()
+    @ManyToOne()
     private Mannschaft mannschaftHeim;
+
+    @Getter
+    @Setter
+    private String nameHeim;
 
     @Getter
     @Setter
@@ -25,10 +31,15 @@ public class Spiel extends BasisEntity implements Serializable {
     @Setter
     private Integer trefferHeimEnde;
 
+    @XmlTransient
     @Getter
     @Setter
-    @OneToOne()
+    @ManyToOne()
     private Mannschaft mannschaftGast;
+
+    @Getter
+    @Setter
+    private String nameGast;
 
     @Getter
     @Setter
@@ -44,26 +55,34 @@ public class Spiel extends BasisEntity implements Serializable {
 
     @Getter
     @Setter
-    private String schiedsrichterName;
+    private String ligaName;
 
     @Getter
     @Setter
     private Boolean absolviert;
 
+    @Getter
+    @Setter
+    private String stadionName;
+
+    @Getter
+    @Setter
+    private Long idSpiel;
 
     public Spiel () {
 
     }
 
-    public Spiel(Mannschaft mannschaftHeim, Mannschaft mannschaftGast, Date datum, String schiedsrichterName){
+    public Spiel(Mannschaft mannschaftHeim, Mannschaft mannschaftGast,String ligaName){
         this.mannschaftGast = mannschaftGast;
         this.mannschaftHeim = mannschaftHeim;
-        this.datum = datum;
-        this.schiedsrichterName = schiedsrichterName;
+        this.ligaName = ligaName;
         this.absolviert = false;
+        this.nameGast = mannschaftGast.getMannschaftsName();
+        this.nameHeim = mannschaftHeim.getMannschaftsName();
     }
 
-    public Boolean punkteEintragen(Integer trefferHeimErsteHalbzeit,
+    public void punkteEintragen(Integer trefferHeimErsteHalbzeit,
     Integer trefferHeimEnde, Integer trefferGastErsteHalbzeit,
                  Integer trefferGastEnde, Boolean absolviert){
         this.trefferHeimErsteHalbzeit = trefferHeimErsteHalbzeit;
@@ -71,7 +90,11 @@ public class Spiel extends BasisEntity implements Serializable {
         this.trefferGastErsteHalbzeit = trefferGastErsteHalbzeit;
         this.trefferGastEnde = trefferGastEnde;
         this.absolviert = absolviert;
-        return true;
+    }
+
+    public void bucheStadion(String stadionName, Date datum){
+        this.stadionName = stadionName;
+        this.datum = datum;
     }
 
     public String getMannschaftHeimName(){
@@ -81,10 +104,6 @@ public class Spiel extends BasisEntity implements Serializable {
     public String getMannschaftGastName(){
         return mannschaftGast.getMannschaftsName();
     }
-
-    public Integer getTrefferHeimEnde(){return trefferHeimEnde;}
-
-    public Integer getTrefferGastEnde(){return trefferGastEnde;}
 
 
 }

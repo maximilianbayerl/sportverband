@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
+<html
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
@@ -14,27 +14,49 @@
         </ui:define>
         <ui:define name="pageContent">
             <div class="container">
-                <div class="col-md-6">
-                    <h:form>
+                <div class="col-md-6 col-md-offset-3">
+                    <h:form rendered="#{loginBean.isAdmindLoggedIn()}" id="tabelleForm">
                         <div class="form-group">
-                            <label>Liga</label>
+                            <label>Name der Tabelle:</label>
                             <h:inputText class="form-control" value="#{tabellenBean.ligaName}"/>
                         </div>
-                        <div class="form-group">
-                            <label>Datum</label>
-                            <h:inputText value="#{tabellenBean.saison}">
-                                <f:convertDateTime pattern="yyyy-MM-dd"/>
-                            </h:inputText>
-                        </div>
-                        <h:commandButton value="Create Tabelle" class="btn btn-success btn-lg btn-block"
+                        <h:commandButton value="Erstelle Tabelle" class="btn btn-primary btn-lg btn-block"
                                          action="#{tabellenBean.createTabelle()}"/>
                     </h:form>
                 </div>
             </div>
+            <br></br>
+            <div class="container">
+                <div class="col-md-6 col-md-offset-3">
+                    <h:form>
+                        <div class="col-md-6 col-md-offset-3">
+                        <div class="form-group">
+                            <label>Tabelle:</label>
+                            <h:selectOneMenu style="margin-left:2em" class="btn btn-primary dropdown-toggle"
+                                             id="Ligas" value="#{tabellenBean.selectedLiga}">
+                                <f:converter binding="#{tabellenBean.tabConv}"/>
+                                <f:selectItems var="liga" itemLabel="#{liga.ligaName}" value="#{tabellenBean.ligen}" />
+                            </h:selectOneMenu>
+                        </div>
+                        </div>
+                        <h:commandButton value="Tabelle aktualisieren und anzeigen:"
+                                         class="btn btn-primary btn-lg btn-block"
+                                         action="#{tabellenBean.anzeigenByLigaName()}"/>
+                    </h:form>
+                </div>
+            </div>
+            <br></br>
+            <div class="container">
+                <div class="col-md-6 col-md-offset-3">
+                    <h:messages globalOnly="false"
+                                style="background-color:#ffe665; color:#848285; margin-bottom:5px; list-style:none; height:4em;" class="form-control"></h:messages>
+                </div>
+            </div>
+            <br></br>
             <div class="container">
             <div class="row">
                 <div class="col-md-10 col-md-offset-1">
-                    <p><b>Your data:</b></p>
+                    <p><b>Tabelle:</b></p>
                     <h:dataTable value="#{tabellenBean.tabellenpositionen}"
                                  class="table table-striped table-bordered dt-responsive nowrap" var="tabellenposition"
                                  border="1">
@@ -46,63 +68,62 @@
                         </h:column>
                         <h:column>
                             <f:facet name="header">
-                                Name
+                                Verein
                             </f:facet>
                             <h:outputText value="#{tabellenposition.getMannschaftsName(tabellenposition.mannschaft)}"/>
                         </h:column>
                         <h:column>
                             <f:facet name="header">
-                               Spiele
+                               Sp
                             </f:facet>
                             <h:outputText value="#{tabellenposition.anzahlAbsolvierteSpiele}"/>
                         </h:column>
                         <h:column>
                             <f:facet name="header">
-                                Siege
+                                S
                             </f:facet>
                             <h:outputText value="#{tabellenposition.anzahlSiege}"/>
                         </h:column>
                         <h:column>
                             <f:facet name="header">
-                                Unentschieden
+                                U
                             </f:facet>
                             <h:outputText value="#{tabellenposition.anzahlUnentschieden}"/>
                         </h:column>
                         <h:column>
                             <f:facet name="header">
-                                Niederlagen
+                                N
                             </f:facet>
                             <h:outputText value="#{tabellenposition.anzahlNiederlage}"/>
                         </h:column>
                         <h:column>
                             <f:facet name="header">
-                                Punkte
-                            </f:facet>
-                            <h:outputText value="#{tabellenposition.anzahlPunkte}"/>
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">
-                               Tore
+                               T
                             </f:facet>
                             <h:outputText value="#{tabellenposition.anzahlTore}"/>
                         </h:column>
                         <h:column>
                         <f:facet name="header">
-                            Gegentore
+                            GT
                         </f:facet>
                         <h:outputText value="#{tabellenposition.anzahlGegentore}"/>
                     </h:column>
                         <h:column>
                             <f:facet name="header">
-                               Tordifferenz
+                               TD
                             </f:facet>
                             <h:outputText value="#{tabellenposition.anzahlTorDifferenz}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                Pkt
+                            </f:facet>
+                            <h:outputText value="#{tabellenposition.anzahlPunkte}"/>
                         </h:column>
                     </h:dataTable>
                 </div>
             </div>
             </div>
-
         </ui:define>
     </ui:composition>
 </html>

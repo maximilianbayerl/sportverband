@@ -1,20 +1,18 @@
 package de.bayerl.sportverband.entity;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.*;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 import lombok.Getter;
 import lombok.Setter;
 
-@XmlRootElement
-@XmlAccessorType(XmlAccessType.FIELD)
+
 @Entity
+@XmlTransient
 public class Mannschaft extends BasisEntity implements Serializable {
 
-    @Column(nullable = false)
     @Getter
     @Setter
     private String mannschaftsName;
@@ -23,7 +21,7 @@ public class Mannschaft extends BasisEntity implements Serializable {
     @Setter
     private Integer anzahlMitgliederFanClub;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @Getter
     @Setter
     private Statistik statistik;
@@ -32,6 +30,16 @@ public class Mannschaft extends BasisEntity implements Serializable {
     @Getter
     @Setter
     private Tabellenposition tabellenPosition;
+
+    @OneToMany(mappedBy = "mannschaftGast", cascade = CascadeType.REMOVE )
+    @Getter
+    @Setter
+    private List<Spiel> spielGast;
+
+    @OneToMany(mappedBy = "mannschaftHeim", cascade = CascadeType.REMOVE )
+    @Getter
+    @Setter
+    private  List<Spiel> spielHeim;
 
     public Mannschaft () {
 
@@ -43,13 +51,13 @@ public class Mannschaft extends BasisEntity implements Serializable {
         this.tabellenPosition = new Tabellenposition();
     }
 
-    public Long getMannschaftsId(){ return this.getId();}
 
-    public String getMannschaftsName(){return this.mannschaftsName;}
+    public void createStatistik(){
+        this.statistik = new Statistik();
+    }
 
-    public Tabellenposition createTabellenPosition(){
+    public void createTabellenPosition(){
         this.tabellenPosition = new Tabellenposition(0,0,0,0,0,0,0,0);
-        return this.tabellenPosition;}
+    }
 
-        public Tabellenposition getTabellenPosition(){return this.tabellenPosition;}
 }
